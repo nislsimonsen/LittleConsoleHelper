@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "zxKRdzK2OArLkdamnN/+TdM7hq9wkl82Qvl/fY6FBK0MSa/sUaWcqBI1DTs+CDVFQuHZZksyxTh+Ra6IpF1jXw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Nis\\source\\repos\\LittleConsoleHelper\\LittleConsoleHelper.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Nis\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512"
+  ],
+  "logs": []
+}
