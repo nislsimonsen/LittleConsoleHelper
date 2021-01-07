@@ -14,6 +14,13 @@ namespace LittleConsoleHelper
 		static ConsoleColor resetBgColor;
 		static int linesWritten;
 
+		public static MenuItem ShowFlat(MenuShowOptions options, params MenuItem[] flatList)
+		{
+			MenuItem rootNode = new MenuItem("root");
+			foreach (var item in flatList)
+				item.Parent = rootNode;
+			return Show(rootNode, options);
+		}
 		public static MenuItem ShowFlat(MenuShowOptions options, params string[] flatList)
 		{
 			MenuItem rootNode = new MenuItem("root");
