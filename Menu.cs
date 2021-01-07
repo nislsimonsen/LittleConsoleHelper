@@ -44,7 +44,7 @@ namespace LittleConsoleHelper
 			{
 				Clear();
 				linesWritten = 0;
-				PrintChoices(rootNode.Children, colorScheme.Text.Value, colorScheme.SelectedText.Value, colorScheme.Background.Value, colorScheme.SelectedBackground.Value, interiorSuffix, interiorOpenSuffix, indentation);
+				PrintChoices(rootNode.Children, colorScheme.Text, colorScheme.SelectedText, colorScheme.Background, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
 
 				var key = Console.ReadKey();
 				switch (key.Key)
