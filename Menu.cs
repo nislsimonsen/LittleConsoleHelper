@@ -13,14 +13,25 @@ namespace LittleConsoleHelper
 		static ConsoleColor resetColor;
 		static ConsoleColor resetBgColor;
 		static int linesWritten;
-		public static bool ClearOptionsOnSelection { get; set; }
 
-		static Menu()
+		public static MenuItem ShowFlat(MenuShowOptions options, params string[] flatList)
 		{
-			ClearOptionsOnSelection = true;
+			MenuItem rootNode = new MenuItem("root");
+			foreach (var item in flatList)
+				new MenuItem(item, rootNode);
+			return Show(rootNode, options);
 		}
-		public static MenuItem DisplayMenu(MenuItem rootNode, ColorScheme colorScheme, bool allowEscape = true, string interiorSuffix = " >", string interiorOpenSuffix = " <")
+		public static MenuItem Show(MenuItem rootNode, MenuShowOptions options = null)
 		{
+			if (options == null)
+				options = new MenuShowOptions();
+
+			return Show(rootNode, options.ColorScheme, options.AllowEscape, options.AllowInteriorNodeSelect, options.InteriorSuffix, options.InteriorOpenSuffix, options.Indentation, options.ClearOnSelect);
+		}
+		public static MenuItem Show(MenuItem rootNode, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", bool clearOnSelect = false)
+		{
+			if (colorScheme == null)
+				colorScheme = GetDefaultColorScheme();
 			currentIndex = 0;
 			itemSelected = rootNode.Children[currentIndex];
 			left = Console.CursorLeft;
@@ -33,7 +44,7 @@ namespace LittleConsoleHelper
 			{
 				Clear();
 				linesWritten = 0;
-				PrintChoices(rootNode.Children, colorScheme.Text.Value, colorScheme.SelectedText.Value, colorScheme.Background.Value, colorScheme.SelectedBackground.Value, interiorSuffix, interiorOpenSuffix);
+				PrintChoices(rootNode.Children, colorScheme.Text.Value, colorScheme.SelectedText.Value, colorScheme.Background.Value, colorScheme.SelectedBackground.Value, interiorSuffix, interiorOpenSuffix, indentation);
 
 				var key = Console.ReadKey();
 				switch (key.Key)
@@ -81,6 +92,8 @@ namespace LittleConsoleHelper
 					case ConsoleKey.Enter:
 						if (itemSelected.Children.Count == 0)
 							cont = false;
+						else if (allowInteriorNodeSelect)
+							cont = false;
 						else
 						{
 							itemSelected.IsExpanded = true;
@@ -98,13 +111,24 @@ namespace LittleConsoleHelper
 				}
 			}
 			Console.ForegroundColor = resetColor;
-			if (ClearOptionsOnSelection)
+			if (clearOnSelect)
 				Clear();
 
 			return itemSelected;
 		}
 
-		private static void PrintChoices(List<MenuItem> choices, ConsoleColor normal, ConsoleColor selected, ConsoleColor normalBg, ConsoleColor selectedBg, string interiorSuffix, string interiorOpenSuffix)
+		internal static ColorScheme GetDefaultColorScheme()
+		{
+			return new ColorScheme
+			{
+				Text = ConsoleColor.White,
+				SelectedText = ConsoleColor.Green,
+				Background = ConsoleColor.Black,
+				SelectedBackground = ConsoleColor.Black
+			};
+		}
+
+		private static void PrintChoices(List<MenuItem> choices, ConsoleColor normal, ConsoleColor selected, ConsoleColor normalBg, ConsoleColor selectedBg, string interiorSuffix, string interiorOpenSuffix, string indentation)
 		{
 			for (var i = 0; i < choices.Count; i++)
 			{
@@ -118,7 +142,7 @@ namespace LittleConsoleHelper
 					Console.ForegroundColor = selected;
 					Console.BackgroundColor = selectedBg;
 					for (var j = 0; j < item.GetLevel(); j++)
-						Console.Write("  ");
+						Console.Write(indentation);
 					Console.WriteLine(item.Text + suffix);
 				}
 				else
@@ -126,97 +150,17 @@ namespace LittleConsoleHelper
 					Console.ForegroundColor = normal;
 					Console.BackgroundColor = normalBg;
 					for (var j = 0; j < item.GetLevel(); j++)
-						Console.Write("  ");
+						Console.Write(indentation);
 					Console.WriteLine(item.Text + suffix);
 				}
 				if (item.IsExpanded)
 				{
-					PrintChoices(item.Children, normal, selected, normalBg, selectedBg, interiorSuffix, interiorOpenSuffix);
+					PrintChoices(item.Children, normal, selected, normalBg, selectedBg, interiorSuffix, interiorOpenSuffix, indentation);
 				}
 			}
 			Console.ForegroundColor = resetColor;
 			Console.BackgroundColor = resetBgColor;
 		}
-		/*
-		 * public static MenuItem DisplayMenu(MenuItem rootNode, ColorScheme colorScheme, bool allowEscape = true, string interiorSuffix = " >")
-		{
-			currentChoice = 0;
-			itemSelected = rootNode.Children[0];
-			first = true;
-			left = Console.CursorLeft;
-			top = Console.CursorTop;
-			resetColor = Console.ForegroundColor;
-			resetBgColor = Console.BackgroundColor;
-
-			bool cont = true;
-			while (cont)
-			{
-				PrintChoices(rootNode.Children, colorScheme.Text.Value, colorScheme.SelectedText.Value, colorScheme.Background.Value, colorScheme.SelectedBackground.Value, interiorSuffix);
-
-				var key = Console.ReadKey();
-				switch (key.Key)
-				{
-					case ConsoleKey.UpArrow:
-						currentChoice--;
-						if (currentChoice < 0)
-							currentChoice = rootNode.Children.Count - 1;
-						break;
-					case ConsoleKey.DownArrow:
-						currentChoice++;
-						if (currentChoice >= rootNode.Children.Count)
-							currentChoice = 0;
-						break;
-					case ConsoleKey.Enter:
-
-						cont = false;
-						break;
-					case ConsoleKey.Escape:
-						if (allowEscape)
-							return null;
-						else
-							break;
-					default:
-						break;
-				}
-			}
-			Console.ForegroundColor = resetColor;
-			if (ClearOptionsOnSelection)
-				Clear(rootNode.Children, interiorSuffix);
-
-			return rootNode.Children[currentChoice];
-		}
-
-		private static void PrintChoices(List<MenuItem> choices, ConsoleColor normal, ConsoleColor selected, ConsoleColor normalBg, ConsoleColor selectedBg, string interiorSuffix)
-		{
-			if (!first)
-				Clear(choices, interiorSuffix);
-			else
-				first = false;
-
-			for (var i = 0; i < choices.Count; i++)
-			{
-				var item = choices[i];
-				var suffix = string.Empty;
-				if (item.Children.Count > 0)
-					suffix = interiorSuffix;
-				if (i == currentChoice)
-				{
-					Console.ForegroundColor = selected;
-					Console.BackgroundColor = selectedBg;
-					Console.WriteLine(item.Text + suffix);
-				}
-				else
-				{
-					Console.ForegroundColor = normal;
-					Console.BackgroundColor = normalBg;
-					Console.WriteLine(item.Text + suffix);
-				}
-			}
-			Console.ForegroundColor = resetColor;
-			Console.BackgroundColor = resetBgColor;
-		}
-		
-		*/
 		private static void Clear()
 		{
 			Console.SetCursorPosition(left, top);
@@ -230,6 +174,28 @@ namespace LittleConsoleHelper
 					Console.WriteLine();
 			}
 			Console.SetCursorPosition(left, top);
+		}
+	}
+
+	public class MenuShowOptions
+	{
+		public ColorScheme ColorScheme { get; set; }
+		public bool AllowEscape { get; set; }
+		public bool AllowInteriorNodeSelect { get; set; }
+		public string InteriorSuffix { get; set; }
+		public string InteriorOpenSuffix { get; set; }
+		public string Indentation { get; set; }
+		public bool ClearOnSelect { get; set; }
+
+		public MenuShowOptions()
+		{
+			ColorScheme = Menu.GetDefaultColorScheme();
+			AllowEscape = false;
+			AllowInteriorNodeSelect = false;
+			InteriorSuffix = " >";
+			InteriorOpenSuffix = " <";
+			Indentation = "  ";
+			ClearOnSelect = false;
 		}
 	}
 }

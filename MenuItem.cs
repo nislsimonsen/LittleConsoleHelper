@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LittleConsoleHelper
 {
@@ -21,6 +22,8 @@ namespace LittleConsoleHelper
 			if (parent != null)
 				parent.Children.Add(this);
 		}
+		private MenuItem()
+		{ }
 
 		public bool IsRoot()
 		{
