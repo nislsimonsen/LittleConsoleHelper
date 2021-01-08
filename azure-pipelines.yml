@@ -15,14 +15,29 @@ variables:
 steps:
 - script: dotnet build LittleConsoleHelper.csproj --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- task: NuGetCommand@2
+
+- task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     packagesToPack: '**/LittleConsoleHelper.csproj'
+    nobuild: true
     versioningScheme: 'off'
-- task: NuGetCommand@2
+
+- task: DotNetCoreCLI@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/LittleConsoleHelper.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: '4d3edbfe-5637-4f8a-bda2-603ab7d98d18'
+    publishVstsFeed: '0fbe2553-d9b9-4647-a052-efc3a72976d8'
+
+#- task: NuGetCommand@2
+#  inputs:
+#    command: 'pack'
+#    packagesToPack: '**/LittleConsoleHelper.csproj'
+#    versioningScheme: 'off'
+#- task: NuGetCommand@2
+#  inputs:
+#    command: 'push'
+#    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+#    nuGetFeedType: 'internal'
+#    publishVstsFeed: '4d3edbfe-5637-4f8a-bda2-603ab7d98d18'
