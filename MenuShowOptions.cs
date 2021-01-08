@@ -12,7 +12,7 @@ namespace LittleConsoleHelper
 		public string InteriorSuffix { get; set; }
 		public string InteriorOpenSuffix { get; set; }
 		public string Indentation { get; set; }
-		public bool ClearOnSelect { get; set; }
+		public ClearOnSelectMode ClearOnSelect { get; set; }
 
 		public MenuShowOptions()
 		{
@@ -22,7 +22,14 @@ namespace LittleConsoleHelper
 			InteriorSuffix = " >";
 			InteriorOpenSuffix = " <";
 			Indentation = "  ";
-			ClearOnSelect = false;
+			ClearOnSelect = ClearOnSelectMode.ClearUnselected;
 		}
+	}
+
+	public enum ClearOnSelectMode
+	{
+		ClearAll,
+		ClearUnselected,
+		None
 	}
 }

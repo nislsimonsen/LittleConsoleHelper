@@ -47,7 +47,7 @@ namespace LittleConsoleHelper
 
 			return Show(rootNode, options.ColorScheme, options.AllowEscape, options.AllowInteriorNodeSelect, options.InteriorSuffix, options.InteriorOpenSuffix, options.Indentation, options.ClearOnSelect);
 		}
-		public static MenuItem Show(MenuItem rootNode, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", bool clearOnSelect = false)
+		public static MenuItem Show(MenuItem rootNode, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", ClearOnSelectMode clearOnSelect = ClearOnSelectMode.ClearUnselected)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
@@ -130,9 +130,13 @@ namespace LittleConsoleHelper
 				}
 			}
 			Console.ForegroundColor = resetColor;
-			if (clearOnSelect)
+			if (clearOnSelect == ClearOnSelectMode.ClearAll)
 				Clear();
-
+			else if (clearOnSelect == ClearOnSelectMode.ClearUnselected)
+			{
+				Clear();
+				PrintChoices(new List<MenuItem> { itemSelected }, colorScheme.Text, colorScheme.SelectedText, colorScheme.Background, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
+			}
 			return itemSelected;
 		}
 
@@ -174,7 +178,7 @@ namespace LittleConsoleHelper
 			Console.SetCursorPosition(left, top);
 			for (var i = 0; i < linesWritten; i++)
 			{
-				for (var j = 0; j < 60; j++)// todo not fixed number here
+				for (var j = 0; j < 60; j++)// todo shold not use fixed number here
 				{
 					Console.Write(" \b ");
 				}
