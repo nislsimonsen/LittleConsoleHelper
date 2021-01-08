@@ -2,9 +2,9 @@
 
 namespace LittleConsoleHelper
 {
-	public static class UserPrompt
+	public static class Prompt
 	{
-		public static string Prompt(string question, ConsoleColor questionColor = ConsoleColor.White, ConsoleColor answerColor = ConsoleColor.Green)
+		public static string ForString(string question, ConsoleColor questionColor = ConsoleColor.White, ConsoleColor answerColor = ConsoleColor.Green)
 		{
 			ConsoleColor resetColor = Console.ForegroundColor;
 			
