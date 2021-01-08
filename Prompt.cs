@@ -11,7 +11,7 @@ namespace LittleConsoleHelper
 			Console.WriteLine(question);
 
 			Console.ForegroundColor = colorScheme.SecondaryText;
-			Console.ForegroundColor = colorScheme.SecondaryBackground;
+			Console.BackgroundColor = colorScheme.SecondaryBackground;
 
 			var result = Console.ReadLine();
 
