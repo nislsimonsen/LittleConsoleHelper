@@ -18,7 +18,10 @@ namespace LittleConsoleHelper
 		{
 			MenuItem rootNode = new MenuItem("root");
 			foreach (var item in flatList)
+			{
+				rootNode.Children.Add(item);
 				item.Parent = rootNode;
+			}
 			return Show(rootNode, options);
 		}
 		public static MenuItem ShowFlat(MenuShowOptions options, params string[] flatList)
