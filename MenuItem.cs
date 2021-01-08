@@ -17,7 +17,9 @@ namespace LittleConsoleHelper
 				Value = value;
 			else
 				Value = text;
+
 			Parent = parent;
+
 			Children = new List<MenuItem>();
 			if (parent != null)
 				parent.Children.Add(this);
