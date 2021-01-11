@@ -173,8 +173,12 @@ namespace LittleConsoleHelper
 						if (allowEscape)
 							return null;
 						else
+						{
+							Console.Write("\b \b");
 							break;
+						}
 					default:
+						Console.Write("\b \b");
 						break;
 				}
 			}
