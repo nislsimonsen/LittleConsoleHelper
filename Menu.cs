@@ -15,20 +15,20 @@ namespace LittleConsoleHelper
 		static int linesWritten;
 		public static MenuShowOptions DefaultMenuShowOptions { get; set; }
 
-		public static MenuItem SelectFromList(params string[] listOfItems)
+		public static MenuItem SelectFromList(IEnumerable<string> listOfItems)
 		{
-			return SelectFromList(MenuShowOptions.Default, listOfItems);
+			return SelectFromList(listOfItems, MenuShowOptions.Default);
 		}
-		public static MenuItem SelectFromList(params MenuItem[] listOfItems)
+		public static MenuItem SelectFromList(IEnumerable<MenuItem>  listOfItems)
 		{
-			return SelectFromList(MenuShowOptions.Default, listOfItems);
+			return SelectFromList(listOfItems, MenuShowOptions.Default);
 		}
 
-		public static MenuItem SelectFromList(MenuShowOptions options, params MenuItem[] listOfItems)
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuShowOptions options)
 		{
-			return SelectFromList(null, options, listOfItems);
+			return SelectFromList(null, listOfItems, options);
 		}
-		public static MenuItem SelectFromList(string headerText, MenuShowOptions options, params MenuItem[] listOfItems)
+		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuShowOptions options)
 		{
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, options.ColorScheme.Text);
@@ -41,11 +41,11 @@ namespace LittleConsoleHelper
 			return Select(rootNode, options);
 		}
 
-		public static MenuItem SelectFromList(MenuShowOptions options, params string[] listOfItems)
+		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, MenuShowOptions options)
 		{
-			return SelectFromList(null, options, listOfItems);
+			return SelectFromList(null, listOfItems, options);
 		}
-		public static MenuItem SelectFromList(string headerText, MenuShowOptions options, params string[] listOfItems)
+		public static MenuItem SelectFromList(string headerText, IEnumerable<string> listOfItems, MenuShowOptions options)
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
@@ -69,19 +69,19 @@ namespace LittleConsoleHelper
 				WriteLine(headerText, options.ColorScheme.Text);
 
 			var items = ((T[])Enum.GetValues(typeof(T))).ToList().Select(a => new MenuItem(a.ToString(), null, a)).ToArray();
-			return SelectFromList(options, items);
+			return SelectFromList(items, options);
 		}
 		public static bool SelectBool(string trueText = "Yes", string falseText = "No", MenuShowOptions options = null)
 		{
-			return SelectBool(null, trueText, falseText, options);
+			return SelectBool(null, options, trueText, falseText);
 		}
-		public static bool SelectBool(string headerText = null, string trueText = "Yes", string falseText = "No", MenuShowOptions options = null)
+		public static bool SelectBool(string headerText = null, MenuShowOptions options = null, string trueText = "Yes", string falseText = "No")
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, options.ColorScheme.Text);
-			return (bool)SelectFromList(options, new MenuItem(trueText, null, true), new MenuItem(falseText, null, false)).Value;
+			return (bool)SelectFromList(new List<MenuItem> { new MenuItem(trueText, null, true), new MenuItem(falseText, null, false) }, options).Value;
 		}
 		public static MenuItem Select(MenuItem rootNode, MenuShowOptions options = null)
 		{

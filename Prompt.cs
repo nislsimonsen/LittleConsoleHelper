@@ -10,8 +10,8 @@ namespace LittleConsoleHelper
 
 			Console.WriteLine(question);
 
-			Console.ForegroundColor = colorScheme.SecondaryText;
-			Console.BackgroundColor = colorScheme.SecondaryBackground;
+			Console.ForegroundColor = colorScheme.SelectedText;
+			Console.BackgroundColor = colorScheme.SelectedBackground;
 
 			var result = Console.ReadLine();
 
@@ -23,7 +23,11 @@ namespace LittleConsoleHelper
 		public static int? ForInt(string question, ColorScheme colorScheme)
 		{
 			var resetColors = InitializeColors(colorScheme);
+
 			Console.WriteLine(question);
+
+			Console.ForegroundColor = colorScheme.SelectedText;
+			Console.BackgroundColor = colorScheme.SelectedBackground;
 
 			string input = string.Empty;
 			
@@ -41,7 +45,7 @@ namespace LittleConsoleHelper
 			}
 			
 			SetColors(resetColors);
-
+			Console.WriteLine();
 			if (keyPressed.Key == ConsoleKey.Escape)
 				return null;
 
