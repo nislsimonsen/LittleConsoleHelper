@@ -15,55 +15,91 @@ namespace LittleConsoleHelper
 		static int linesWritten;
 		public static MenuShowOptions DefaultMenuShowOptions { get; set; }
 
-		public static MenuItem ShowFlat(params string[] listOfItems)
+		public static MenuItem SelectFromList(params string[] listOfItems)
 		{
-			return ShowFlat(MenuShowOptions.Default, listOfItems);
+			return SelectFromList(MenuShowOptions.Default, listOfItems);
 		}
-		public static MenuItem ShowFlat(params MenuItem[] listOfItems)
+		public static MenuItem SelectFromList(params MenuItem[] listOfItems)
 		{
-			return ShowFlat(MenuShowOptions.Default, listOfItems);
+			return SelectFromList(MenuShowOptions.Default, listOfItems);
 		}
-		public static MenuItem ShowFlat(MenuShowOptions options, params MenuItem[] listOfItems)
+
+		public static MenuItem SelectFromList(MenuShowOptions options, params MenuItem[] listOfItems)
 		{
+			return SelectFromList(null, options, listOfItems);
+		}
+		public static MenuItem SelectFromList(string headerText, MenuShowOptions options, params MenuItem[] listOfItems)
+		{
+			if (!string.IsNullOrEmpty(headerText))
+				WriteLine(headerText, options.ColorScheme.Text);
 			MenuItem rootNode = new MenuItem("root");
 			foreach (var item in listOfItems)
 			{
 				rootNode.Children.Add(item);
 				item.Parent = rootNode;
 			}
-			return Show(rootNode, options);
+			return Select(rootNode, options);
 		}
-		public static MenuItem ShowFlat(MenuShowOptions options, params string[] listOfItems)
+
+		public static MenuItem SelectFromList(MenuShowOptions options, params string[] listOfItems)
 		{
+			return SelectFromList(null, options, listOfItems);
+		}
+		public static MenuItem SelectFromList(string headerText, MenuShowOptions options, params string[] listOfItems)
+		{
+			if (options == null)
+				options = MenuShowOptions.Default;
+			if (!string.IsNullOrEmpty(headerText))
+				WriteLine(headerText, options.ColorScheme.Text);
 			MenuItem rootNode = new MenuItem("root");
 			foreach (var item in listOfItems)
 				new MenuItem(item, rootNode);
-			return Show(rootNode, options);
+			return Select(rootNode, options);
 		}
+
 		public static MenuItem SelectEnumMember<T>(MenuShowOptions options = null)
+		{
+			return SelectEnumMember<T>(null, options);
+		}
+		public static MenuItem SelectEnumMember<T>(string headerText, MenuShowOptions options = null)
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
+			if (!string.IsNullOrEmpty(headerText))
+				WriteLine(headerText, options.ColorScheme.Text);
+
 			var items = ((T[])Enum.GetValues(typeof(T))).ToList().Select(a => new MenuItem(a.ToString(), null, a)).ToArray();
-			return ShowFlat(options, items);
+			return SelectFromList(options, items);
 		}
 		public static bool SelectBool(string trueText = "Yes", string falseText = "No", MenuShowOptions options = null)
 		{
-			if (options == null)
-				options = MenuShowOptions.Default;
-			return (bool)ShowFlat(options, new MenuItem(trueText, null, true), new MenuItem(falseText, null, false)).Value;
+			return SelectBool(null, trueText, falseText, options);
 		}
-		public static MenuItem Show(MenuItem rootNode, MenuShowOptions options = null)
+		public static bool SelectBool(string headerText = null, string trueText = "Yes", string falseText = "No", MenuShowOptions options = null)
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
-
-			return Show(rootNode, options.ColorScheme, options.AllowEscape, options.AllowInteriorNodeSelect, options.InteriorSuffix, options.InteriorOpenSuffix, options.Indentation, options.ClearOnSelect);
+			if (!string.IsNullOrEmpty(headerText))
+				WriteLine(headerText, options.ColorScheme.Text);
+			return (bool)SelectFromList(options, new MenuItem(trueText, null, true), new MenuItem(falseText, null, false)).Value;
 		}
-		public static MenuItem Show(MenuItem rootNode, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", ClearOnSelectMode clearOnSelect = ClearOnSelectMode.ClearUnselected)
+		public static MenuItem Select(MenuItem rootNode, MenuShowOptions options = null)
+		{
+			return Select(rootNode, null, options);
+		}
+		public static MenuItem Select(MenuItem rootNode, string headerText, MenuShowOptions options = null)
+		{
+			if (options == null)
+				options = MenuShowOptions.Default;
+			
+			return Select(headerText, rootNode, options.ColorScheme, options.AllowEscape, options.AllowInteriorNodeSelect, options.InteriorSuffix, options.InteriorOpenSuffix, options.Indentation, options.ClearOnSelect);
+		}
+		private static MenuItem Select(string headerText, MenuItem rootNode, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", ClearOnSelectMode clearOnSelect = ClearOnSelectMode.ClearUnselected)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Empty;
+			if (!string.IsNullOrEmpty(headerText))
+				WriteLine(headerText, colorScheme.Text);
 			currentIndex = 0;
 			itemSelected = rootNode.Children[currentIndex];
 			left = Console.CursorLeft;
@@ -199,6 +235,13 @@ namespace LittleConsoleHelper
 					Console.WriteLine();
 			}
 			Console.SetCursorPosition(left, top);
+		}
+		private static void WriteLine(string text, ConsoleColor color)
+		{
+			var resetColor = Console.ForegroundColor;
+			Console.ForegroundColor = color;
+			Console.WriteLine(text);
+			Console.ForegroundColor = resetColor;
 		}
 	}
 }
