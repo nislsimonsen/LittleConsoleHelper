@@ -16,7 +16,7 @@ namespace LittleConsoleHelper
 
 		public MenuShowOptions()
 		{
-			ColorScheme = ColorScheme.Default;
+			ColorScheme = ColorScheme.Empty;
 			AllowEscape = false;
 			AllowInteriorNodeSelect = false;
 			InteriorSuffix = " >";
@@ -24,6 +24,8 @@ namespace LittleConsoleHelper
 			Indentation = "  ";
 			ClearOnSelect = ClearOnSelectMode.ClearUnselected;
 		}
+
+		public static MenuShowOptions Default = new MenuShowOptions { ColorScheme = ColorScheme.Default };
 	}
 
 	public enum ClearOnSelectMode

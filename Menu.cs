@@ -17,11 +17,11 @@ namespace LittleConsoleHelper
 
 		public static MenuItem ShowFlat(params string[] listOfItems)
 		{
-			return ShowFlat(new MenuShowOptions(), listOfItems);
+			return ShowFlat(MenuShowOptions.Default, listOfItems);
 		}
 		public static MenuItem ShowFlat(params MenuItem[] listOfItems)
 		{
-			return ShowFlat(new MenuShowOptions(), listOfItems);
+			return ShowFlat(MenuShowOptions.Default, listOfItems);
 		}
 		public static MenuItem ShowFlat(MenuShowOptions options, params MenuItem[] listOfItems)
 		{
@@ -40,17 +40,25 @@ namespace LittleConsoleHelper
 				new MenuItem(item, rootNode);
 			return Show(rootNode, options);
 		}
+		public static MenuItem SelectEnumMember<T>(MenuShowOptions options = null)
+		{
+			if (options == null)
+				options = MenuShowOptions.Default;
+			var items = ((T[])Enum.GetValues(typeof(T))).ToList().Select(a => new MenuItem(a.ToString(), null, a)).ToArray();
+			return ShowFlat(options, items);
+
+		}
 		public static MenuItem Show(MenuItem rootNode, MenuShowOptions options = null)
 		{
 			if (options == null)
-				options = new MenuShowOptions();
+				options = MenuShowOptions.Default;
 
 			return Show(rootNode, options.ColorScheme, options.AllowEscape, options.AllowInteriorNodeSelect, options.InteriorSuffix, options.InteriorOpenSuffix, options.Indentation, options.ClearOnSelect);
 		}
 		public static MenuItem Show(MenuItem rootNode, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", ClearOnSelectMode clearOnSelect = ClearOnSelectMode.ClearUnselected)
 		{
 			if (colorScheme == null)
-				colorScheme = ColorScheme.Default;
+				colorScheme = ColorScheme.Empty;
 			currentIndex = 0;
 			itemSelected = rootNode.Children[currentIndex];
 			left = Console.CursorLeft;

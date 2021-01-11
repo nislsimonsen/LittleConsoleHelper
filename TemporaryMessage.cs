@@ -28,7 +28,7 @@ namespace LittleConsoleHelper
 		public static void WriteLine(string message, SimpleColorScheme colorScheme = null, bool refresh = false, bool startNew = false)
 		{
 			if (colorScheme == null)
-				colorScheme = SimpleColorScheme.Default;
+				colorScheme = SimpleColorScheme.Empty;
 			if (CurrentMessages == null)
 				CurrentMessages = new List<string>();
 			if (startNew)
