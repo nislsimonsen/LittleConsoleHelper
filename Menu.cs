@@ -46,7 +46,12 @@ namespace LittleConsoleHelper
 				options = MenuShowOptions.Default;
 			var items = ((T[])Enum.GetValues(typeof(T))).ToList().Select(a => new MenuItem(a.ToString(), null, a)).ToArray();
 			return ShowFlat(options, items);
-
+		}
+		public static bool SelectBool(string trueText = "Yes", string falseText = "No", MenuShowOptions options = null)
+		{
+			if (options == null)
+				options = MenuShowOptions.Default;
+			return (bool)ShowFlat(options, new MenuItem(trueText, null, true), new MenuItem(falseText, null, false)).Value;
 		}
 		public static MenuItem Show(MenuItem rootNode, MenuShowOptions options = null)
 		{
