@@ -4,8 +4,10 @@ namespace LittleConsoleHelper
 {
 	public static class Prompt
 	{
-		public static string ForString(string question, ColorScheme colorScheme)
+		public static string ForString(string question, ColorScheme colorScheme = null)
 		{
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 			Console.WriteLine(question);
 
@@ -19,8 +21,11 @@ namespace LittleConsoleHelper
 			return result;
 		}
 
-		private static string ForString(string question, string prefix, string postfix, ColorScheme colorScheme)
+		/*
+		private static string ForString(string question, string prefix, string postfix, ColorScheme colorScheme = null)
 		{
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
 			// postponed, so private..
 			var resetColors = InitializeColors(colorScheme);
 			Console.WriteLine(question);
@@ -97,9 +102,12 @@ namespace LittleConsoleHelper
 			SetColors(resetColors);
 			return input;
 		}
+		*/
 
-		public static string ForStringWithPrefix(string question, string prefix, ColorScheme colorScheme)
+		public static string ForStringWithPrefix(string question, string prefix, ColorScheme colorScheme = null)
 		{
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 			Console.WriteLine(question);
 
@@ -117,8 +125,10 @@ namespace LittleConsoleHelper
 			return result;
 		}
 
-		public static string ForStringWithPostfix(string question, string postfix, ColorScheme colorScheme)
+		public static string ForStringWithPostfix(string question, string postfix, ColorScheme colorScheme = null)
 		{
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 			Console.WriteLine(question);
 
@@ -205,8 +215,10 @@ namespace LittleConsoleHelper
 			return input;
 		}
 
-		public static int? ForInt(string question, ColorScheme colorScheme)
+		public static int? ForInt(string question, ColorScheme colorScheme = null)
 		{
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 
 			Console.WriteLine(question);

@@ -71,7 +71,7 @@ namespace LittleConsoleHelper
 			var items = ((T[])Enum.GetValues(typeof(T))).ToList().Select(a => new MenuItem(a.ToString(), null, a)).ToArray();
 			return SelectFromList(items, options);
 		}
-		public static bool SelectBool(string trueText = "Yes", string falseText = "No", MenuShowOptions options = null)
+		public static bool SelectBool(string trueText, string falseText, MenuShowOptions options)
 		{
 			return SelectBool(null, options, trueText, falseText);
 		}
@@ -118,16 +118,31 @@ namespace LittleConsoleHelper
 				switch (key.Key)
 				{
 					case ConsoleKey.UpArrow:
-						currentIndex--;
-						if (currentIndex < 0)
-							currentIndex = itemSelected.Parent.Children.Count - 1;
-						itemSelected = itemSelected.Parent.Children[currentIndex];
+						if (itemSelected.Parent.IsExpanded && currentIndex == 0)
+						{
+							itemSelected = itemSelected.Parent;
+						}
+						else
+						{
+							currentIndex--;
+							if (currentIndex < 0)
+								currentIndex = itemSelected.Parent.Children.Count - 1;
+							itemSelected = itemSelected.Parent.Children[currentIndex];
+						}
 						break;
 					case ConsoleKey.DownArrow:
-						currentIndex++;
-						if (currentIndex >= itemSelected.Parent.Children.Count)
+						if (itemSelected.IsExpanded)
+						{
+							itemSelected = itemSelected.Children.First();
 							currentIndex = 0;
-						itemSelected = itemSelected.Parent.Children[currentIndex];
+						}
+						else
+						{
+							currentIndex++;
+							if (currentIndex >= itemSelected.Parent.Children.Count)
+								currentIndex = 0;
+							itemSelected = itemSelected.Parent.Children[currentIndex];
+						}
 						break;
 					case ConsoleKey.LeftArrow:
 						if (itemSelected.IsExpanded)
