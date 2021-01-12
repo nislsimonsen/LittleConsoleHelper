@@ -285,6 +285,8 @@ namespace LittleConsoleHelper
 			}
 			SetColors(resetColors);
 			Console.WriteLine();
+			if (keyPressed.Key == ConsoleKey.Escape)
+				return null;
 			return input;
 		}
 
