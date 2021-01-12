@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Text;
 
 namespace LittleConsoleHelper
 {
 	public static class Prompt
 	{
-		public static string ForString(string question, ColorScheme colorScheme = null)
+		public static string ForString(string header, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(question);
+			Console.WriteLine(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
@@ -20,6 +21,7 @@ namespace LittleConsoleHelper
 
 			return result;
 		}
+
 
 		/*
 		private static string ForString(string question, string prefix, string postfix, ColorScheme colorScheme = null)
@@ -104,12 +106,77 @@ namespace LittleConsoleHelper
 		}
 		*/
 
-		public static string ForStringWithPrefix(string question, string prefix, ColorScheme colorScheme = null)
+		/// <summary>
+		/// IMPORTANT: NOT using SecureString, just masking what the user enters
+		/// </summary>
+		/// <param name="header"></param>
+		/// <param name="colorScheme"></param>
+		/// <returns></returns>
+		public static string ForStringMasked(string header, char maskChar = '*', ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(question);
+			Console.WriteLine(header);
+
+			Console.ForegroundColor = colorScheme.SelectedText;
+			Console.BackgroundColor = colorScheme.SelectedBackground;
+			StringBuilder s = new StringBuilder();
+			
+			var result = string.Empty;
+			var posLeft = 0;
+			var posTop = Console.CursorTop;
+			var leftPart = string.Empty;
+			var rightPart = string.Empty;
+			var keyPressed = Console.ReadKey();
+			while (keyPressed.Key != ConsoleKey.Enter && keyPressed.Key != ConsoleKey.Escape)
+			{
+				switch (keyPressed.Key)
+				{
+					case ConsoleKey.LeftArrow:
+						//if (posLeft > 0)
+						//	posLeft--;
+						break;
+					case ConsoleKey.RightArrow:
+						//if (posLeft < result.Length)
+						//	posLeft++;
+						break;
+					case ConsoleKey.Delete:
+						break;
+					case ConsoleKey.Backspace:
+						break;
+						case ConsoleKey.Home:
+						break;
+					case ConsoleKey.End:
+						break;
+					
+					default:
+						Console.SetCursorPosition(0, posTop);
+						for (var i = 0; i < result.Length+1; i++)
+							Console.Write(" \b ");
+						Console.SetCursorPosition(0, posTop);
+						for (var i = 0; i < result.Length+1; i++)
+							Console.Write(maskChar);
+						posLeft++;
+						
+						leftPart += keyPressed.KeyChar.ToString();
+						
+						break;
+				}
+				Console.SetCursorPosition(posLeft, posTop);
+				
+				result = leftPart + rightPart;
+				keyPressed = Console.ReadKey();
+			}
+			return result;
+		}
+
+		public static string ForStringWithPrefix(string header, string prefix, ColorScheme colorScheme = null)
+		{
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
+			var resetColors = InitializeColors(colorScheme);
+			Console.WriteLine(header);
 
 			Console.ForegroundColor = colorScheme.SecondaryText;
 			Console.BackgroundColor = colorScheme.SecondaryBackground;
@@ -125,12 +192,12 @@ namespace LittleConsoleHelper
 			return result;
 		}
 
-		public static string ForStringWithPostfix(string question, string postfix, ColorScheme colorScheme = null)
+		public static string ForStringWithPostfix(string header, string postfix, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(question);
+			Console.WriteLine(header);
 
 			string input = string.Empty;
 
@@ -215,13 +282,13 @@ namespace LittleConsoleHelper
 			return input;
 		}
 
-		public static int? ForInt(string question, ColorScheme colorScheme = null)
+		public static int? ForInt(string header, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 
-			Console.WriteLine(question);
+			Console.WriteLine(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
