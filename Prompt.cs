@@ -194,6 +194,8 @@ namespace LittleConsoleHelper
 
 		public static string ForString(string header, string postfix, string defaultValue, ColorScheme colorScheme = null)
 		{
+			if (postfix == null)
+				postfix = string.Empty;
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
