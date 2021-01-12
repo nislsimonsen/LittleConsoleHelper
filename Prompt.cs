@@ -171,7 +171,7 @@ namespace LittleConsoleHelper
 			return result;
 		}
 
-		public static string ForStringWithPrefix(string header, string prefix, ColorScheme colorScheme = null)
+		public static string ForString(string header, string prefix, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
@@ -192,7 +192,7 @@ namespace LittleConsoleHelper
 			return result;
 		}
 
-		public static string ForStringWithPostfix(string header, string postfix, ColorScheme colorScheme = null)
+		public static string ForString(string header, string postfix, string defaultValue, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
@@ -200,14 +200,20 @@ namespace LittleConsoleHelper
 			Console.WriteLine(header);
 
 			string input = string.Empty;
-
+			if (!string.IsNullOrEmpty(defaultValue))
+			{
+				input = defaultValue;
+				Console.ForegroundColor = colorScheme.SelectedText;
+				Console.BackgroundColor = colorScheme.SelectedBackground;
+				Console.Write(defaultValue);
+			}
 			Console.ForegroundColor = colorScheme.SecondaryText;
 			Console.BackgroundColor = colorScheme.SecondaryBackground;
 			Console.Write(postfix);
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
 
-			var left = 0;
+			var left = input.Length;
 			var currentLength = postfix.Length;
 			var part1 = string.Empty;
 			var part2 = string.Empty;
@@ -262,7 +268,7 @@ namespace LittleConsoleHelper
 						break;
 				}
 				Console.SetCursorPosition(0, Console.CursorTop);
-				for (var i = 0; i < currentLength; i++)
+				for (var i = 0; i < currentLength+1; i++)
 					Console.Write(" \b ");
 				Console.SetCursorPosition(0, Console.CursorTop);
 				Console.Write(input);
