@@ -3,8 +3,17 @@ using System.Text;
 
 namespace LittleConsoleHelper
 {
+	/// <summary>
+	/// Remark: All ColorScheme parameters can be omitted and will use a LittleConfigHelper.config file (if it exists) or bland default colors otherwise
+	/// </summary>
 	public static class Prompt
 	{
+		/// <summary>
+		/// Prompts the user for a string.
+		/// </summary>
+		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
+		/// <param name="colorScheme">Optional</param>
+		/// <returns></returns>
 		public static string ForString(string header, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
@@ -107,17 +116,19 @@ namespace LittleConsoleHelper
 		*/
 
 		/// <summary>
+		/// Prompts the user for a string.
 		/// IMPORTANT: NOT using SecureString, just masking what the user enters
 		/// </summary>
-		/// <param name="header"></param>
+		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
 		/// <param name="colorScheme"></param>
 		/// <returns></returns>
-		public static string ForStringMasked(string header, char maskChar = '*', ColorScheme colorScheme = null)
+		public static string ForStringMasked(string header, char? maskChar = '*', ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(header);
+			if(!string.IsNullOrEmpty(header))
+				Console.WriteLine(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
@@ -155,10 +166,12 @@ namespace LittleConsoleHelper
 						for (var i = 0; i < result.Length+1; i++)
 							Console.Write(" \b ");
 						Console.SetCursorPosition(0, posTop);
-						for (var i = 0; i < result.Length+1; i++)
-							Console.Write(maskChar);
-						posLeft++;
-						
+						if (maskChar.HasValue)
+						{
+							for (var i = 0; i < result.Length + 1; i++)
+								Console.Write(maskChar);
+							posLeft++;
+						}
 						leftPart += keyPressed.KeyChar.ToString();
 						
 						break;
@@ -168,9 +181,18 @@ namespace LittleConsoleHelper
 				result = leftPart + rightPart;
 				keyPressed = Console.ReadKey();
 			}
+
+			SetColors(resetColors);
 			return result;
 		}
 
+		/// <summary>
+		/// Prompts the user for a string.
+		/// </summary>
+		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
+		/// <param name="prefix">Will be prepended to the string the user enters. Cannot be overwritten by the user</param>
+		/// <param name="colorScheme">Optional</param>
+		/// <returns></returns>
 		public static string ForString(string header, string prefix, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
@@ -191,7 +213,14 @@ namespace LittleConsoleHelper
 
 			return result;
 		}
-
+		/// <summary>
+		/// Prompts the user for a string.
+		/// </summary>
+		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
+		/// <param name="postfix">Will be appended to the string the user enters. Cannot be overwritten by the user</param>
+		/// <param name="defaultValue">Can be overwritten. Optional, pass empty or null to disable</param>
+		/// <param name="colorScheme">Optional</param>
+		/// <returns></returns>
 		public static string ForString(string header, string postfix, string defaultValue, ColorScheme colorScheme = null)
 		{
 			if (postfix == null)
@@ -199,7 +228,9 @@ namespace LittleConsoleHelper
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(header);
+
+			if(!string.IsNullOrEmpty(header))
+				Console.WriteLine(header);
 
 			string input = string.Empty;
 			if (!string.IsNullOrEmpty(defaultValue))
@@ -292,13 +323,21 @@ namespace LittleConsoleHelper
 			return input;
 		}
 
-		public static int? ForInt(string header, ColorScheme colorScheme = null)
+		/// <summary>
+		/// Prompts the user for an integer value. 
+		/// Only numbers are allowed
+		/// </summary>
+		/// <param name="header">Optional</param>
+		/// <param name="colorScheme">Optional</param>
+		/// <returns>Null if the user ESCapes, otherwise the integer entered</returns>
+		public static int? ForInt(string header = null, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 
-			Console.WriteLine(header);
+			if(!string.IsNullOrEmpty(header))
+				Console.WriteLine(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
@@ -311,6 +350,11 @@ namespace LittleConsoleHelper
 				if (char.IsDigit(keyPressed.KeyChar))
 				{
 					input += keyPressed.KeyChar.ToString();
+				}
+				else if (keyPressed.Key == ConsoleKey.Backspace)
+				{
+					input = input.Substring(0, input.Length - 1);
+					Console.Write(" \b");
 				}
 				else
 					Console.Write("\b \b");
