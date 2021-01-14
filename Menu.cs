@@ -24,20 +24,22 @@ namespace LittleConsoleHelper
 			return SelectFromList(listOfItems, MenuShowOptions.Default);
 		}
 
-		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuShowOptions options)
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuShowOptions options = null)
 		{
 			return SelectFromList(listOfItems, null, options);
 		}
-		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options)
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options = null)
 		{
 			return SelectFromList(null, listOfItems, defaultItem, options);
 		}
-		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuShowOptions options)
+		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuShowOptions options = null)
 		{
 			return SelectFromList(headerText, listOfItems, null, options);
 		}
-		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options)
+		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options = null)
 		{
+			if (options == null)
+				options = MenuShowOptions.Default;
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, options.ColorScheme.Text);
 			MenuItem rootNode = new MenuItem("root");
