@@ -239,7 +239,7 @@ namespace LittleConsoleHelper
 			else if (clearOnSelect == ClearOnSelectMode.ClearUnselected)
 			{
 				Clear();
-				PrintChoices(new List<MenuItem> { itemSelected }, colorScheme.Text, colorScheme.SelectedText, colorScheme.Background, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
+				PrintChoices(new List<MenuItem> { itemSelected }, colorScheme.SecondaryText, colorScheme.SelectedText, colorScheme.SecondaryBackground, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
 			}
 			return itemSelected;
 		}
