@@ -148,7 +148,7 @@ namespace LittleConsoleHelper
 			{
 				Clear();
 				linesWritten = 0;
-				PrintChoices(rootNode.Children, colorScheme.Text, colorScheme.SelectedText, colorScheme.Background, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
+				PrintChoices(rootNode.Children, colorScheme.SecondaryText, colorScheme.SelectedText, colorScheme.SecondaryBackground, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
 
 				var key = Console.ReadKey();
 				switch (key.Key)
