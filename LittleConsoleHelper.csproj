@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.3.13</Version>
+    <Version>1.3.14</Version>
     <Authors>Nis L. Simonsen</Authors>
     <Description>When you have no choice but to build a UI in a console app (cmd/ps), LittleConsoleHelper makes displaying menus or just getting user input just a little bit easier</Description>
-    <PackageReleaseNotes>Fixed postfix bug</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed bugs, added documentation</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
