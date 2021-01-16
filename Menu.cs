@@ -17,13 +17,14 @@ namespace LittleConsoleHelper
 
 		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, string defaultItem = null)
 		{
-			return SelectFromList(listOfItems, MenuShowOptions.Default);
+			var listOfMenuItems = listOfItems.Select(s => new MenuItem(s, null, s));
+			var defaultMenuItem = defaultItem == null ? null : listOfMenuItems.Where(mi => mi.Value.Equals(defaultItem)).Single();
+			return SelectFromList(listOfMenuItems, defaultMenuItem, MenuShowOptions.Default);
 		}
-		public static MenuItem SelectFromList(IEnumerable<MenuItem>  listOfItems, MenuItem defaultItem = null)
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem = null)
 		{
-			return SelectFromList(listOfItems, MenuShowOptions.Default);
+			return SelectFromList(listOfItems, defaultItem, MenuShowOptions.Default);
 		}
-
 		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuShowOptions options = null)
 		{
 			return SelectFromList(listOfItems, null, options);
@@ -83,7 +84,9 @@ namespace LittleConsoleHelper
 				WriteLine(headerText, options.ColorScheme.Text);
 
 			var items = ((T[])Enum.GetValues(typeof(T))).ToList().Select(a => new MenuItem(a.ToString(), null, a)).ToArray();
-			var menuItemSelected = items.Where(i => ((T)i.Value).Equals(selectedItem)).Single();
+			MenuItem menuItemSelected = null;
+			if(selectedItem != null)
+				menuItemSelected = items.Where(i => ((T)i.Value).Equals(selectedItem)).FirstOrDefault();
 			return SelectFromList(items, menuItemSelected, options);
 		}
 		public static bool SelectBool(string trueText, string falseText, MenuShowOptions options)
