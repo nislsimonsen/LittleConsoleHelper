@@ -31,6 +31,7 @@ namespace LittleConsoleHelper
 				colorScheme = SimpleColorScheme.Empty;
 			if (CurrentMessages == null)
 				CurrentMessages = new List<string>();
+			
 			if (startNew)
 			{
 				Top = Console.CursorTop;
@@ -47,6 +48,7 @@ namespace LittleConsoleHelper
 			Console.BackgroundColor = colorScheme.Background;
 
 			Console.WriteLine(message);
+
 			Console.ForegroundColor = previousColor;
 			Console.BackgroundColor = previousBgColor;
 

@@ -37,5 +37,10 @@ namespace LittleConsoleHelper
 				return i;
 			return Parent.GetLevel() + 1;
 		}
+
+		public MenuItem Clone()
+		{
+			return (MenuItem)this.MemberwiseClone();
+		}
 	}
 }
