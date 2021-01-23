@@ -19,14 +19,30 @@ namespace LittleConsoleHelper
 		public ConsoleColor SelectedBackground { get; set; }
 		public ConsoleColor SecondaryText{ get; set; }
 		public ConsoleColor SecondaryBackground { get; set; }
+		public ConsoleColor Header { get; set; }
+		public ConsoleColor SubHeader { get; set; }
 
-		public static new ColorScheme Empty = new ColorScheme { Text = Console.ForegroundColor, SelectedText = Console.ForegroundColor, Background = Console.BackgroundColor, SelectedBackground = Console.BackgroundColor, SecondaryText = Console.ForegroundColor, SecondaryBackground = Console.BackgroundColor };
-		public static new ColorScheme Default = new ColorScheme { 
+		public static new ColorScheme Empty = new ColorScheme
+		{
+			Text = Console.ForegroundColor,
+			SelectedText = Console.ForegroundColor,
+			Background = Console.BackgroundColor,
+			SelectedBackground = Console.BackgroundColor,
+			SecondaryText = Console.ForegroundColor,
+			SecondaryBackground = Console.BackgroundColor,
+			Header = Console.ForegroundColor,
+			SubHeader = Console.ForegroundColor
+		};
+		public static new ColorScheme Default = new ColorScheme 
+		{ 
 			Text = Configuration.ColorText ?? Console.ForegroundColor, 
 			SelectedText = Configuration.ColorSelectedText ?? ConsoleColor.White,
 			SecondaryText = Configuration.ColorSecondaryText ?? Console.ForegroundColor,
 			Background = Configuration.ColorTextBG ?? Console.BackgroundColor, 
 			SelectedBackground = Configuration.ColorSelectedTextBG ?? Console.BackgroundColor, 
-			SecondaryBackground = Configuration.ColorSecondaryTextBG ?? Console.BackgroundColor };
+			SecondaryBackground = Configuration.ColorSecondaryTextBG ?? Console.BackgroundColor,
+			Header = Configuration.ColorHeader ?? ConsoleColor.Yellow,
+			SubHeader = Configuration.ColorSubHeader ?? ConsoleColor.Yellow
+		};
 	}
 }

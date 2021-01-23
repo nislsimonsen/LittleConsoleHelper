@@ -25,7 +25,7 @@ namespace LittleConsoleHelper
 		/// <param name="colorScheme">(optional) SimpleColorScheme which specifies text and background color</param>
 		/// <param name="refresh">(optional) clears the previous messages</param>
 		/// <param name="startNew">(optional) indicates that this call will start a new section</param>
-		public static void WriteLine(string message, SimpleColorScheme colorScheme = null, bool refresh = false, bool startNew = false)
+		public static void WriteLine(string message, SimpleColorScheme colorScheme = null, bool refresh = false, bool startNew = false, bool fasterButNoFormat = false)
 		{
 			if (colorScheme == null)
 				colorScheme = SimpleColorScheme.Empty;
@@ -47,7 +47,10 @@ namespace LittleConsoleHelper
 			Console.ForegroundColor = colorScheme.Text;
 			Console.BackgroundColor = colorScheme.Background;
 
-			Console.WriteLine(message);
+			if(fasterButNoFormat)
+				Console.WriteLine(message);
+			else
+				Formatter.Write(message);
 
 			Console.ForegroundColor = previousColor;
 			Console.BackgroundColor = previousBgColor;

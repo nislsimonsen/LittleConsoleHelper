@@ -44,6 +44,8 @@ namespace LittleConsoleHelper
 			ColorTextBG = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Background");
 			ColorSelectedTextBG = GetColor(doc, "/LittleConsoleHelper/ColorScheme/SelectedBackground");
 			ColorSecondaryTextBG = GetColor(doc, "/LittleConsoleHelper/ColorScheme/SecondaryBackground");
+			ColorHeader = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Header");
+			ColorSubHeader = GetColor(doc, "/LittleConsoleHelper/ColorScheme/SubHeader");
 		}
 		static ConsoleColor? GetColor(XmlDocument doc, string xpath)
 		{
@@ -63,5 +65,7 @@ namespace LittleConsoleHelper
 		internal static ConsoleColor? ColorTextBG { get; private set; }
 		internal static ConsoleColor? ColorSelectedTextBG { get; private set; }
 		internal static ConsoleColor? ColorSecondaryTextBG { get; private set; }
+		internal static ConsoleColor? ColorHeader { get; private set; }
+		internal static ConsoleColor? ColorSubHeader { get; private set; }
 	}
 }
