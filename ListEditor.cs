@@ -7,7 +7,7 @@ namespace LittleConsoleHelper
 {
 	public static class ListEditor
 	{
-		public static List<string> Edit(string header, List<string> items, string defaultItem, ColorScheme colorScheme, string helpText = "Use: Up/Down/Insert/Delete/Enter/Esc")
+		public static List<string> Edit(string header, List<string> items, string defaultItem = null, ColorScheme colorScheme = null, string helpText = "Use: Up/Down/Insert/Delete/Enter/Esc")
 		{
 			if (string.IsNullOrEmpty(defaultItem) && items.Count() > 0)
 				defaultItem = items[0];
@@ -23,7 +23,13 @@ namespace LittleConsoleHelper
 		static List<string> WrittenLines = new List<string>();
 		private static List<MenuItem> EditList(string header, List<MenuItem> items, MenuItem defaultItem, ColorScheme colorScheme, string helpText)
 		{
-			var selectedIndex = items.IndexOf(defaultItem);
+			int selectedIndex;
+			if (defaultItem == null || items.Count == 0)
+				selectedIndex = 0;
+			else
+				selectedIndex = items.IndexOf(defaultItem);
+			if (colorScheme == null)
+				colorScheme = ColorScheme.Default;
 
 			var workingCopy = new List<MenuItem>();
 			foreach (var item in items)
