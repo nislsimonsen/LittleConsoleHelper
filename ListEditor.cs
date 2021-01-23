@@ -9,10 +9,12 @@ namespace LittleConsoleHelper
 	{
 		public static List<string> Edit(string header, List<string> items, string defaultItem = null, ColorScheme colorScheme = null, string helpText = "Use: Up/Down/Insert/Delete/Enter/Esc")
 		{
+			var menuItems = items.Select(i => new MenuItem(i, null)).ToList();
 			if (string.IsNullOrEmpty(defaultItem) && items.Count() > 0)
 				defaultItem = items[0];
-			var menuItems = items.Select(i => new MenuItem(i, null)).ToList();
-			var menuDefaultItem = menuItems.First(i => i.Text.Equals(defaultItem));
+			MenuItem menuDefaultItem = null;
+			if(menuItems.Any())
+				menuDefaultItem = menuItems.First(i => i.Text.Equals(defaultItem));
 			var result = EditList(header, menuItems, menuDefaultItem, colorScheme, helpText);
 			if (result == null)
 				return null;
@@ -41,6 +43,8 @@ namespace LittleConsoleHelper
 			PosLeft = Console.CursorLeft;
 			PosTop = Console.CursorTop;
 
+			if (!items.Any())
+				AddNewAndGetName(colorScheme, 0, workingCopy); 
 			var key = DisplayAndGetCommand(workingCopy, ref selectedIndex, colorScheme, helpText);
 			while (key != ConsoleKey.Escape && key != ConsoleKey.Enter)
 			{
@@ -56,19 +60,7 @@ namespace LittleConsoleHelper
 					case ConsoleKey.Insert:
 						if (workingCopy.Any())
 							selectedIndex++;
-						var placeholderText = "New item: ";
-						var placeholder = new MenuItem(placeholderText, null);
-						workingCopy.Insert(selectedIndex, placeholder);
-						ClearItems();
-						WriteItems(workingCopy, selectedIndex, colorScheme);
-						Console.SetCursorPosition(placeholderText.Length, PosTop + selectedIndex);
-						var resetColor = Console.ForegroundColor;
-						Console.ForegroundColor = colorScheme.SelectedText;
-						var name = Console.ReadLine();
-						Console.ForegroundColor = resetColor;
-						if (!string.IsNullOrEmpty(name))
-							workingCopy.Insert(selectedIndex, new MenuItem(name, null));
-						workingCopy.Remove(placeholder);
+						AddNewAndGetName(colorScheme, selectedIndex, workingCopy);
 						break;
 					case ConsoleKey.UpArrow:
 						if (selectedIndex > 0)
@@ -108,6 +100,23 @@ namespace LittleConsoleHelper
 			}
 
 			throw new Exception("The world is ending");
+		}
+
+		private static void AddNewAndGetName(ColorScheme colorScheme, int selectedIndex, List<MenuItem> workingCopy)
+		{
+			var placeholderText = "New item: ";
+			var placeholder = new MenuItem(placeholderText, null);
+			workingCopy.Insert(selectedIndex, placeholder);
+			ClearItems();
+			WriteItems(workingCopy, selectedIndex, colorScheme);
+			Console.SetCursorPosition(placeholderText.Length, PosTop + selectedIndex);
+			var resetColor = Console.ForegroundColor;
+			Console.ForegroundColor = colorScheme.SelectedText;
+			var name = Console.ReadLine();
+			Console.ForegroundColor = resetColor;
+			if (!string.IsNullOrEmpty(name))
+				workingCopy.Insert(selectedIndex, new MenuItem(name, null));
+			workingCopy.Remove(placeholder);
 		}
 
 		private static ConsoleKey DisplayAndGetCommand(List<MenuItem> items, ref int selectedIndex, ColorScheme colorScheme, string helpText)
