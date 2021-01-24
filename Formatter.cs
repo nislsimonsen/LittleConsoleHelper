@@ -10,7 +10,7 @@ namespace LittleConsoleHelper
 		public static ColorScheme ColorScheme { get; set; }
 		public static void WriteAddLineBreak(params string[] text)
 		{
-			Write(text);
+			WriteLines(text);
 			Console.WriteLine();
 		}
 		public static void WriteAndWaitAddLineBreak(params string[] text)
@@ -20,11 +20,11 @@ namespace LittleConsoleHelper
 		}
 		public static void WriteAndWait(params string[] text)
 		{
-			Write(text);
+			WriteLines(text);
 			Console.ReadLine();
 			Console.SetCursorPosition(0, Console.CursorTop - 1);
 		}
-		public static void Write(params string[] text)
+		public static void WriteLines(params string[] text)
 		{
 			if (ColorScheme == null)
 				ColorScheme = ColorScheme.Default;
@@ -54,8 +54,21 @@ namespace LittleConsoleHelper
 					{
 						if (c == '{')
 						{
-							isInFormatSpecifier = true;
-							formatString = string.Empty;
+							if (text[j][i + 1] == '{')
+							{
+								Console.Write(c);
+								i++;
+							}
+							else
+							{
+								isInFormatSpecifier = true;
+								formatString = string.Empty;
+							}
+						}
+						else if (c == '}' && text[j][i + 1] == '}')
+						{
+							Console.Write(c);
+							i++;
 						}
 						else
 						{
@@ -75,7 +88,8 @@ namespace LittleConsoleHelper
 			{
 				Console.ForegroundColor = literalColor;
 			}
-			else if (formatString.Equals("reset", StringComparison.InvariantCultureIgnoreCase))
+			else if (formatString.StartsWith("/")
+				|| formatString.Equals("reset", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = resetColor;
 			}
@@ -83,7 +97,7 @@ namespace LittleConsoleHelper
 			{
 				Console.ForegroundColor = ColorScheme.Text;
 			}
-			else if (formatString.Equals("selectedtext", StringComparison.InvariantCultureIgnoreCase) 
+			else if (formatString.Equals("selectedtext", StringComparison.InvariantCultureIgnoreCase)
 				|| formatString.Equals("selected", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = ColorScheme.SelectedText;

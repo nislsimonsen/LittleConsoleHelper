@@ -7,7 +7,20 @@ namespace LittleConsoleHelper
 {
 	public static class ListEditor
 	{
-		public static List<string> Edit(string header, List<string> items, string defaultItem = null, ColorScheme colorScheme = null, string helpText = "Use: Up/Down/Insert/Delete/Enter/Esc")
+		static int PosLeft;
+		static int PosTop;
+		static List<string> WrittenLines = new List<string>();
+		/// <summary>
+		/// Allows the user to manipulate a list
+		/// </summary>
+		/// <param name="items">The initial list of items. Will not be changed by this method.</param>
+		/// <param name="header">Optional text to display</param>
+		/// <param name="defaultItem">If present, must equal an item from items</param>
+		/// <param name="promptForFirstItemIfEmpty">If this is true and items is empty, one item will automatically be inserted and the user will prompted to name it.</param>
+		/// <param name="colorScheme">optional</param>
+		/// <param name="helpText">Optional. Will be displayed below the list editor.</param>
+		/// <returns>If the user exits by pressing Enter: A new list containing the accepted items. If the user exits by pressing Escape: A copy of items</returns>
+		public static List<string> Edit(List<string> items, string header = null, string defaultItem = null, bool promptForFirstItemIfEmpty = true, ColorScheme colorScheme = null, string helpText = "Use: (shift+)Up/Down / Insert/Delete / Enter/Esc")
 		{
 			var menuItems = items.Select(i => new MenuItem(i, null)).ToList();
 			if (string.IsNullOrEmpty(defaultItem) && items.Count() > 0)
@@ -20,10 +33,8 @@ namespace LittleConsoleHelper
 				return null;
 			return result.Select(mi => mi.Text).ToList();
 		}
-		static int PosLeft;
-		static int PosTop;
-		static List<string> WrittenLines = new List<string>();
-		private static List<MenuItem> EditList(string header, List<MenuItem> items, MenuItem defaultItem, ColorScheme colorScheme, string helpText)
+		
+		private static List<MenuItem> EditList(string header, List<MenuItem> items, MenuItem defaultItem, ColorScheme colorScheme, string helpText, bool promptForFirstItemIfEmpty = true)
 		{
 			int selectedIndex;
 			if (defaultItem == null || items.Count == 0)
@@ -43,7 +54,7 @@ namespace LittleConsoleHelper
 			PosLeft = Console.CursorLeft;
 			PosTop = Console.CursorTop;
 
-			if (!items.Any())
+			if (!items.Any() && promptForFirstItemIfEmpty)
 				AddNewAndGetName(colorScheme, 0, workingCopy); 
 			var key = DisplayAndGetCommand(workingCopy, ref selectedIndex, colorScheme, helpText);
 			while (key != ConsoleKey.Escape && key != ConsoleKey.Enter)

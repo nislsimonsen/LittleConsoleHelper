@@ -21,7 +21,7 @@ namespace LittleConsoleHelper
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(header);
+			Formatter.WriteLines(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
@@ -32,10 +32,26 @@ namespace LittleConsoleHelper
 
 			return result;
 		}
+		/// <summary>
+		/// Prompts the user for a string with autocomplete
+		/// </summary>
+		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
+		/// <param name="autocompleteOptions">Autocomplete as list of strings</param>
+		/// <param name="charsToDisplayOptions">Number of characters that the user must enter before the autocomplete options show</param>
+		/// <param name="colorScheme"></param>
+		/// <returns></returns>
 		public static string ForString(string header, List<string> autocompleteOptions, int charsToDisplayOptions = 1, ColorScheme colorScheme = null)
 		{
 			return ForString(header, (s) => autocompleteOptions.Where(a => a.StartsWith(s, StringComparison.InvariantCultureIgnoreCase)).ToList(), charsToDisplayOptions, colorScheme);
 		}
+		/// <summary>
+		/// Prompts the user for a string with autocomplete
+		/// </summary>
+		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
+		/// <param name="autocompleteFunction">Autocomplete callback function which will be passed the partial text the user has typed</param>
+		/// <param name="charsToDisplayOptions">Number of characters that the user must enter before the autocomplete options show</param>
+		/// <param name="colorScheme"></param>
+		/// <returns></returns>
 		public static string ForString(string header, Func<string, List<string>> autocompleteFunction, int charsToDisplayOptions = 1, ColorScheme colorScheme = null)
 		{
 			var r = new StringBuilder(100);
@@ -44,7 +60,7 @@ namespace LittleConsoleHelper
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 			if (!string.IsNullOrEmpty(header))
-				Console.WriteLine(header);
+				Formatter.WriteLines(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 
@@ -130,7 +146,7 @@ namespace LittleConsoleHelper
 					for (var i = 0; i < Math.Min(matches.Count, 10); i++)
 					{
 						Console.ForegroundColor = i == selectedMatch ? colorScheme.SelectedText : colorScheme.Text;
-						Console.WriteLine(matches[i]);
+						Formatter.WriteLines(matches[i]);
 					}
 					Console.ForegroundColor = colorScheme.SelectedText;
 				}
@@ -173,13 +189,13 @@ namespace LittleConsoleHelper
 		/// <param name="header">Will be written as a message to the user. Empty or null to disable</param>
 		/// <param name="prefix">Will be prepended to the string the user enters. Cannot be overwritten by the user</param>
 		/// <param name="colorScheme">Optional</param>
-		/// <returns></returns>
+		/// <returns>The entered string. Does not include the prefix</returns>
 		public static string ForString(string header, string prefix, ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
-			Console.WriteLine(header);
+			Formatter.WriteLines(header);
 
 			Console.ForegroundColor = colorScheme.SecondaryText;
 			Console.BackgroundColor = colorScheme.SecondaryBackground;
@@ -201,7 +217,7 @@ namespace LittleConsoleHelper
 		/// <param name="postfix">Will be appended to the string the user enters. Cannot be overwritten by the user</param>
 		/// <param name="defaultValue">Can be overwritten. Optional, pass empty or null to disable</param>
 		/// <param name="colorScheme">Optional</param>
-		/// <returns></returns>
+		/// <returns>The entered string. Does not include the postfix</returns>
 		public static string ForString(string header, string postfix, string defaultValue, ColorScheme colorScheme = null)
 		{
 			if (postfix == null)
@@ -211,7 +227,7 @@ namespace LittleConsoleHelper
 			var resetColors = InitializeColors(colorScheme);
 
 			if (!string.IsNullOrEmpty(header))
-				Console.WriteLine(header);
+				Formatter.WriteLines(header);
 
 			string input = string.Empty;
 			if (!string.IsNullOrEmpty(defaultValue))
@@ -229,6 +245,8 @@ namespace LittleConsoleHelper
 
 			var left = input.Length;
 			var currentLength = postfix.Length;
+			if (defaultValue != null)
+				currentLength += defaultValue.Length;
 			var part1 = string.Empty;
 			var part2 = string.Empty;
 
@@ -281,6 +299,7 @@ namespace LittleConsoleHelper
 						//}
 						break;
 				}
+
 				Console.SetCursorPosition(0, Console.CursorTop);
 				for (var i = 0; i < currentLength + 1; i++)
 					Console.Write(" \b ");
@@ -308,7 +327,7 @@ namespace LittleConsoleHelper
 		{
 			Console.SetCursorPosition(0, posTop);
 			//for (var i = 0; i < inputLength + 1; i++)
-				Console.WriteLine("                                                          ");
+				Console.WriteLine("                                                          ");//wtf
 				
 			Console.SetCursorPosition(0, posTop);
 		}
@@ -339,7 +358,7 @@ namespace LittleConsoleHelper
 				colorScheme = ColorScheme.Default;
 			var resetColors = InitializeColors(colorScheme);
 			if (!string.IsNullOrEmpty(header))
-				Console.WriteLine(header);
+				Formatter.WriteLines(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;
@@ -410,7 +429,7 @@ namespace LittleConsoleHelper
 			var resetColors = InitializeColors(colorScheme);
 
 			if (!string.IsNullOrEmpty(header))
-				Console.WriteLine(header);
+				Formatter.WriteLines(header);
 
 			Console.ForegroundColor = colorScheme.SelectedText;
 			Console.BackgroundColor = colorScheme.SelectedBackground;

@@ -21,37 +21,6 @@ namespace LittleConsoleHelper
 			var defaultMenuItem = defaultItem == null ? null : listOfMenuItems.Where(mi => mi.Value.Equals(defaultItem)).Single();
 			return SelectFromList(listOfMenuItems, defaultMenuItem, MenuShowOptions.Default);
 		}
-		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem = null)
-		{
-			return SelectFromList(listOfItems, defaultItem, MenuShowOptions.Default);
-		}
-		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuShowOptions options = null)
-		{
-			return SelectFromList(listOfItems, null, options);
-		}
-		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options = null)
-		{
-			return SelectFromList(null, listOfItems, defaultItem, options);
-		}
-		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuShowOptions options = null)
-		{
-			return SelectFromList(headerText, listOfItems, null, options);
-		}
-		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options = null)
-		{
-			if (options == null)
-				options = MenuShowOptions.Default;
-			if (!string.IsNullOrEmpty(headerText))
-				WriteLine(headerText, options.ColorScheme.Text);
-			MenuItem rootNode = new MenuItem("root");
-			foreach (var item in listOfItems)
-			{
-				rootNode.Children.Add(item);
-				item.Parent = rootNode;
-			}
-			return Select(rootNode, null, defaultItem, options);
-		}
-
 		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, MenuShowOptions options)
 		{
 			return SelectFromList(null, listOfItems, options);
@@ -67,7 +36,37 @@ namespace LittleConsoleHelper
 				new MenuItem(item, rootNode);
 			return Select(rootNode, options);
 		}
-
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem = null)
+		{
+			return SelectFromList(listOfItems, defaultItem, MenuShowOptions.Default);
+		}
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuShowOptions options)
+		{
+			return SelectFromList(listOfItems, null, options);
+		}
+		public static MenuItem SelectFromList(IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options)
+		{
+			return SelectFromList(null, listOfItems, defaultItem, options);
+		}
+		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuShowOptions options)
+		{
+			return SelectFromList(headerText, listOfItems, null, options);
+		}
+		public static MenuItem SelectFromList(string headerText, IEnumerable<MenuItem> listOfItems, MenuItem defaultItem, MenuShowOptions options)
+		{
+			if (options == null)
+				options = MenuShowOptions.Default;
+			if (!string.IsNullOrEmpty(headerText))
+				WriteLine(headerText, options.ColorScheme.Text);
+			MenuItem rootNode = new MenuItem("root");
+			foreach (var item in listOfItems)
+			{
+				rootNode.Children.Add(item);
+				item.Parent = rootNode;
+			}
+			return Select(rootNode, null, defaultItem, options);
+		}
+		
 		public static MenuItem SelectEnumMember<T>(MenuShowOptions options = null)
 		{
 			return SelectEnumMember<T>(null, default(T), options);
@@ -89,6 +88,7 @@ namespace LittleConsoleHelper
 				menuItemSelected = items.Where(i => ((T)i.Value).Equals(selectedItem)).FirstOrDefault();
 			return SelectFromList(items, menuItemSelected, options);
 		}
+
 		public static bool SelectBool(string trueText, string falseText, MenuShowOptions options)
 		{
 			return SelectBool(null, options, trueText, falseText);
@@ -101,6 +101,7 @@ namespace LittleConsoleHelper
 				WriteLine(headerText, options.ColorScheme.Text);
 			return (bool)SelectFromList(new List<MenuItem> { new MenuItem(trueText, null, true), new MenuItem(falseText, null, false) }, options).Value;
 		}
+
 		public static MenuItem Select(MenuItem rootNode, MenuShowOptions options = null)
 		{
 			return Select(rootNode, null, null, options);
@@ -116,6 +117,7 @@ namespace LittleConsoleHelper
 			
 			return Select(headerText, rootNode, selectedItem, options.ColorScheme, options.AllowEscape, options.AllowInteriorNodeSelect, options.InteriorSuffix, options.InteriorOpenSuffix, options.Indentation, options.ClearOnSelect);
 		}
+
 		private static MenuItem Select(string headerText, MenuItem rootNode, MenuItem selectedItem, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", ClearOnSelectMode clearOnSelect = ClearOnSelectMode.ClearUnselected)
 		{
 			if (colorScheme == null)
@@ -300,7 +302,7 @@ namespace LittleConsoleHelper
 		{
 			var resetColor = Console.ForegroundColor;
 			Console.ForegroundColor = color;
-			Console.WriteLine(text);
+			Formatter.WriteLines(text);
 			Console.ForegroundColor = resetColor;
 		}
 	}
