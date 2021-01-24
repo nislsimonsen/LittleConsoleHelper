@@ -50,7 +50,7 @@ namespace LittleConsoleHelper
 			if(fasterButNoFormat)
 				Console.WriteLine(message);
 			else
-				Formatter.Write(message);
+				Formatter.WriteLines(message);
 
 			Console.ForegroundColor = previousColor;
 			Console.BackgroundColor = previousBgColor;
