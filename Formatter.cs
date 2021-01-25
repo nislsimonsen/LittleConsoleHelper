@@ -52,31 +52,37 @@ namespace LittleConsoleHelper
 					}
 					else
 					{
-						if (c == '{')
+						if (c == '}' && i != text[j].Length && text[j][i + 1] == '}'
+							|| c == '{' && i != text[j].Length && text[j][i + 1] == '{')
 						{
-								if(IsAlternating && c != ' ')
-									Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
+							if (IsAlternating && c != ' ')
+							{
+								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
 								Console.Write(c);
-								i++;
 							}
 							else
 							{
-								isInFormatSpecifier = true;
-								formatString = string.Empty;
-								IsAlternating = false;
-								Console.ForegroundColor = resetColor;
+								Console.Write(c);
 							}
-							if (IsAlternating && c != ' ')
-								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
-						{
-							Console.Write(c);
 							i++;
+						}
+						else if (c == '{')
+						{
+							isInFormatSpecifier = true;
+							formatString = string.Empty;
+							IsAlternating = false;
 						}
 						else
 						{
 							if (IsAlternating && c != ' ')
+							{
 								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
-							Console.Write(c);
+								Console.Write(c);
+							}
+							else
+							{
+								Console.Write(c);
+							}
 						}
 					}
 				}
