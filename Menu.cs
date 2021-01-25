@@ -41,6 +41,8 @@ namespace LittleConsoleHelper
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
+			if (options.ColorScheme == null)
+				options.ColorScheme = ColorScheme.Default;
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, options.ColorScheme.Text);
 			MenuItem rootNode = new MenuItem("root");
@@ -226,11 +228,11 @@ namespace LittleConsoleHelper
 						}
 						break;
 					case ConsoleKey.Escape:
+						Console.Write("\b \b");
 						if (allowEscape)
 							return null;
 						else
 						{
-							Console.Write("\b \b");
 							break;
 						}
 					default:

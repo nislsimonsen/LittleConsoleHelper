@@ -16,7 +16,7 @@ namespace LittleConsoleHelper
 
 		public MenuShowOptions()
 		{
-			ColorScheme = ColorScheme.Empty;
+			ColorScheme = ColorScheme.Default;
 			AllowEscape = false;
 			AllowInteriorNodeSelect = false;
 			InteriorSuffix = " >";

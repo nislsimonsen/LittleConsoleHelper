@@ -54,20 +54,32 @@ namespace LittleConsoleHelper
 					{
 						if (c == '{')
 						{
+								if(IsAlternating && c != ' ')
+									Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
 							isInFormatSpecifier = true;
 							formatString = string.Empty;
+								IsAlternating = false;
+								Console.ForegroundColor = resetColor;
 						}
+							if (IsAlternating && c != ' ')
+								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
 						else
 						{
+							if (IsAlternating && c != ' ')
+								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
 							Console.Write(c);
 						}
 					}
 				}
+				Console.ForegroundColor = resetColor;
+				IsAlternating = false;
 				Console.WriteLine();
 			}
 			Console.ForegroundColor = resetColor;
 		}
-
+		private static List<ConsoleColor> AlternationColors;
+		private static int AlternationIndex;
+		private static bool IsAlternating;
 		private static void HandleFormat(string formatString)
 		{
 			ConsoleColor literalColor;
@@ -100,6 +112,21 @@ namespace LittleConsoleHelper
 			else if (formatString.Equals("subheader", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = ColorScheme.SubHeader;
+			}
+			else if (formatString.StartsWith("alternate", StringComparison.InvariantCultureIgnoreCase))
+			{
+				AlternationColors = new List<ConsoleColor>();
+				var colorStrings = formatString.Substring(10, formatString.Length - 11).Split(",");
+				foreach (var colorString in colorStrings)
+				{
+					ConsoleColor color;
+					if (Enum.TryParse<ConsoleColor>(colorString, true, out color))
+						AlternationColors.Add(color);
+					else
+						Formatter.WriteAndWaitAddLineBreak("Error: Unknown ConsoleColor '" + colorString + "'");
+				}
+				AlternationIndex = 0;
+				IsAlternating = true;
 			}
 		}
 	}
