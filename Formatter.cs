@@ -10,7 +10,7 @@ namespace LittleConsoleHelper
 		public static ColorScheme ColorScheme { get; set; }
 		public static void WriteAddLineBreak(params string[] text)
 		{
-			Write(text);
+			WriteLines(text);
 			Console.WriteLine();
 		}
 		public static void WriteAndWaitAddLineBreak(params string[] text)
@@ -20,11 +20,11 @@ namespace LittleConsoleHelper
 		}
 		public static void WriteAndWait(params string[] text)
 		{
-			Write(text);
+			WriteLines(text);
 			Console.ReadLine();
 			Console.SetCursorPosition(0, Console.CursorTop - 1);
 		}
-		public static void Write(params string[] text)
+		public static void WriteLines(params string[] text)
 		{
 			if (ColorScheme == null)
 				ColorScheme = ColorScheme.Default;
@@ -56,13 +56,22 @@ namespace LittleConsoleHelper
 						{
 								if(IsAlternating && c != ' ')
 									Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
-							isInFormatSpecifier = true;
-							formatString = string.Empty;
+								Console.Write(c);
+								i++;
+							}
+							else
+							{
+								isInFormatSpecifier = true;
+								formatString = string.Empty;
 								IsAlternating = false;
 								Console.ForegroundColor = resetColor;
-						}
+							}
 							if (IsAlternating && c != ' ')
 								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
+						{
+							Console.Write(c);
+							i++;
+						}
 						else
 						{
 							if (IsAlternating && c != ' ')
@@ -87,7 +96,8 @@ namespace LittleConsoleHelper
 			{
 				Console.ForegroundColor = literalColor;
 			}
-			else if (formatString.Equals("reset", StringComparison.InvariantCultureIgnoreCase))
+			else if (formatString.StartsWith("/")
+				|| formatString.Equals("reset", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = resetColor;
 			}
@@ -95,7 +105,7 @@ namespace LittleConsoleHelper
 			{
 				Console.ForegroundColor = ColorScheme.Text;
 			}
-			else if (formatString.Equals("selectedtext", StringComparison.InvariantCultureIgnoreCase) 
+			else if (formatString.Equals("selectedtext", StringComparison.InvariantCultureIgnoreCase)
 				|| formatString.Equals("selected", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = ColorScheme.SelectedText;
