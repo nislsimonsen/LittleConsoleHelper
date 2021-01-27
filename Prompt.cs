@@ -445,7 +445,8 @@ namespace LittleConsoleHelper
 				}
 				else if (keyPressed.Key == ConsoleKey.Backspace)
 				{
-					input = input.Substring(0, input.Length - 1);
+					if(input.Length > 0)
+						input = input.Substring(0, input.Length - 1);
 					Console.Write(" \b");
 				}
 				else

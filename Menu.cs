@@ -90,18 +90,21 @@ namespace LittleConsoleHelper
 				menuItemSelected = items.Where(i => ((T)i.Value).Equals(selectedItem)).FirstOrDefault();
 			return SelectFromList(items, menuItemSelected, options);
 		}
-
-		public static bool SelectBool(string trueText, string falseText, MenuShowOptions options)
+		public static bool? SelectBool(string headerText, string trueText, string falseText, MenuShowOptions options = null)
+		{
+			return SelectBool(headerText, options, trueText, falseText);
+		}
+		public static bool? SelectBool(string trueText, string falseText, MenuShowOptions options)
 		{
 			return SelectBool(null, options, trueText, falseText);
 		}
-		public static bool SelectBool(string headerText = null, MenuShowOptions options = null, string trueText = "Yes", string falseText = "No")
+		public static bool? SelectBool(string headerText = null, MenuShowOptions options = null, string trueText = "Yes", string falseText = "No")
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, options.ColorScheme.Text);
-			return (bool)SelectFromList(new List<MenuItem> { new MenuItem(trueText, null, true), new MenuItem(falseText, null, false) }, options).Value;
+			return (bool?)SelectFromList(new List<MenuItem> { new MenuItem(trueText, null, true), new MenuItem(falseText, null, false) }, options)?.Value;
 		}
 
 		public static MenuItem Select(MenuItem rootNode, MenuShowOptions options = null)

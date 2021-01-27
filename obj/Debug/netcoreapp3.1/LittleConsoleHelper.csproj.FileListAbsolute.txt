@@ -6,3 +6,4 @@ C:\Users\Nis\source\repos\LittleConsoleHelper\obj\Debug\netcoreapp3.1\LittleCons
 C:\Users\Nis\source\repos\LittleConsoleHelper\obj\Debug\netcoreapp3.1\LittleConsoleHelper.csproj.CoreCompileInputs.cache
 C:\Users\Nis\source\repos\LittleConsoleHelper\obj\Debug\netcoreapp3.1\LittleConsoleHelper.dll
 C:\Users\Nis\source\repos\LittleConsoleHelper\obj\Debug\netcoreapp3.1\LittleConsoleHelper.pdb
+C:\Users\Nis\source\repos\LittleConsoleHelper\obj\Debug\netcoreapp3.1\LittleConsoleHelper.csprojAssemblyReference.cache
