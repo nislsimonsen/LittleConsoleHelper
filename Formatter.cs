@@ -144,6 +144,10 @@ namespace LittleConsoleHelper
 				AlternationIndex = 0;
 				IsAlternating = true;
 			}
+			else if (Enum.TryParse<ConsoleColor>(formatString, true, out var result))
+			{
+				Console.ForegroundColor = result;
+			}
 		}
 	}
 }
