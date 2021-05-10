@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.7.1.1</Version>
+    <Version>1.7.1.2</Version>
     <Authors>Nis L. Simonsen</Authors>
     <Description>When you have no choice but to build a UI in a console app (cmd/ps), LittleConsoleHelper makes displaying menus or just getting user input just a little bit easier</Description>
     <PackageReleaseNotes>Added Reset method to revert colors at end
 Added additional color code names.
-1.7.1.1 Fixed a rendering bug</PackageReleaseNotes>
+1.7.1.2 Fixed a rendering bug</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>

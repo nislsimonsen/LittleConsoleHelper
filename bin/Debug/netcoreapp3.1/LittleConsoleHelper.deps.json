@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "LittleConsoleHelper/1.7.0": {
+      "LittleConsoleHelper/1.7.1.2": {
         "runtime": {
           "LittleConsoleHelper.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "LittleConsoleHelper/1.7.0": {
+    "LittleConsoleHelper/1.7.1.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

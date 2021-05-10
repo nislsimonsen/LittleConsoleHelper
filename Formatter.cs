@@ -97,8 +97,7 @@ namespace LittleConsoleHelper
 		private static bool IsAlternating;
 		private static void HandleFormat(string formatString)
 		{
-			ConsoleColor literalColor;
-			if (Enum.TryParse<ConsoleColor>(formatString, true, out literalColor))
+			if (Enum.TryParse<ConsoleColor>(formatString, true, out var literalColor))
 			{
 				Console.ForegroundColor = literalColor;
 			}
@@ -144,9 +143,29 @@ namespace LittleConsoleHelper
 				AlternationIndex = 0;
 				IsAlternating = true;
 			}
-			else if (Enum.TryParse<ConsoleColor>(formatString, true, out var result))
+			else if (formatString.Equals("note", StringComparison.InvariantCultureIgnoreCase))
 			{
-				Console.ForegroundColor = result;
+				Console.ForegroundColor = ColorScheme.Note;
+			}
+			else if (formatString.Equals("success", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Success;
+			}
+			else if (formatString.Equals("warning", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Warning;
+			}
+			else if (formatString.Equals("error", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Error;
+			}
+			else if (formatString.Equals("input", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Input;
+			}
+			else if (formatString.Equals("secondaryinput", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.SecondaryInput;
 			}
 		}
 	}
