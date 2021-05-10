@@ -10,10 +10,15 @@ namespace LittleConsoleHelper
 	{
 		
 		static string configFileName = "LittleConsoleHelper.config";
-
+		static ConsoleColor defaultColor;
 		static Configuration()
 		{
+			defaultColor = Console.ForegroundColor;
 			LoadConfigFile();
+		}
+		static void Reset()
+		{
+			Console.ForegroundColor = defaultColor;
 		}
 
 		static void LoadConfigFile()
@@ -46,6 +51,13 @@ namespace LittleConsoleHelper
 			ColorSecondaryTextBG = GetColor(doc, "/LittleConsoleHelper/ColorScheme/SecondaryBackground");
 			ColorHeader = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Header");
 			ColorSubHeader = GetColor(doc, "/LittleConsoleHelper/ColorScheme/SubHeader");
+			ColorNote = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Note");
+			ColorSuccess = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Success");
+			ColorWarning = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Warning");
+			ColorError = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Error");
+			ColorInput = GetColor(doc, "/LittleConsoleHelper/ColorScheme/Input");
+			ColorSecondaryInput = GetColor(doc, "/LittleConsoleHelper/ColorScheme/SecondaryInput");
+
 		}
 		static ConsoleColor? GetColor(XmlDocument doc, string xpath)
 		{
@@ -67,5 +79,12 @@ namespace LittleConsoleHelper
 		internal static ConsoleColor? ColorSecondaryTextBG { get; private set; }
 		internal static ConsoleColor? ColorHeader { get; private set; }
 		internal static ConsoleColor? ColorSubHeader { get; private set; }
+		internal static ConsoleColor? ColorNote { get; private set; }
+		internal static ConsoleColor? ColorSuccess { get; private set; }
+		internal static ConsoleColor? ColorWarning { get; private set; }
+		internal static ConsoleColor? ColorError { get; private set; }
+		internal static ConsoleColor? ColorInput { get; private set; }
+		internal static ConsoleColor? ColorSecondaryInput { get; private set; }
+
 	}
 }
