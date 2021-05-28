@@ -51,7 +51,8 @@ namespace LittleConsoleHelper
 
 			var isInFormatSpecifier = false;
 			var formatString = string.Empty;
-			
+			StringBuilder buffer = new StringBuilder();
+
 			for (var i = 0; i < text.Length; i++)
 			{
 				var c = text[i];
@@ -59,6 +60,8 @@ namespace LittleConsoleHelper
 				{
 					if (c == '}')
 					{
+						Console.Write(buffer.ToString());
+						buffer.Clear();
 						isInFormatSpecifier = false;
 						HandleFormat(formatString);
 					}
@@ -79,7 +82,8 @@ namespace LittleConsoleHelper
 						}
 						else
 						{
-							Console.Write(c);
+							//Console.Write(c);
+							buffer.Append(c);
 						}
 						i++;
 					}
@@ -98,12 +102,15 @@ namespace LittleConsoleHelper
 						}
 						else
 						{
-							Console.Write(c);
+							//Console.Write(c);
+							buffer.Append(c);
 						}
 					}
 				}
 			}
-			for (var i = GetUnformattedText(text).Length; i++ < width; Console.Write(' ')) { }
+			Console.Write(buffer);
+			buffer.Clear();
+			//for (var i = GetUnformattedText(text).Length; i++ < width; Console.Write(' ')) { }
 		}
 		public static string GetUnformattedText(string text)
 		{
