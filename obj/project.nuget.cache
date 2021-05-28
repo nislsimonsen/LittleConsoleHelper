@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2fYd8Uv3R2oExEEfXXI4SKFsrKuC7AOTNrsXz75rTtJlkc0mAmzg3FxMei29RJMcyRG44XxDw72nDWODOGMdpg==",
+  "dgSpecHash": "EHTONHeV7jFj6Ptc4fNvegKH3yQBGG2jikAReRMeecZkU9czPVlahs/XjuDXuzO/oNTcgWMr7dxivoZpupR8nQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Nis\\source\\repos\\LittleConsoleHelper\\LittleConsoleHelper.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\Nis\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

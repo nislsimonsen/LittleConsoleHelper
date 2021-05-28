@@ -24,81 +24,119 @@ namespace LittleConsoleHelper
 			Console.ReadLine();
 			Console.SetCursorPosition(0, Console.CursorTop - 1);
 		}
+		public static void WriteLine(string text)
+		{
+			WriteLines(text);
+		}
 		public static void WriteLines(params string[] text)
 		{
-			if (ColorScheme == null)
-				ColorScheme = ColorScheme.Default;
-
-			resetColor = ColorScheme.Text;
-			Console.ForegroundColor = resetColor;
-			var isInFormatSpecifier = false;
-			var formatString = string.Empty;
 			for (var j = 0; j < text.Length; j++)
 			{
-				for (var i = 0; i < text[j].Length; i++)
-				{
-					var c = text[j][i];
-					if (isInFormatSpecifier)
-					{
-						if (c == '}')
-						{
-							isInFormatSpecifier = false;
-							HandleFormat(formatString);
-						}
-						else
-						{
-							formatString += c;
-						}
-					}
-					else
-					{
-						if (c == '}' && i != text[j].Length && text[j][i + 1] == '}'
-							|| c == '{' && i != text[j].Length && text[j][i + 1] == '{')
-						{
-							if (IsAlternating && c != ' ')
-							{
-								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
-								Console.Write(c);
-							}
-							else
-							{
-								Console.Write(c);
-							}
-							i++;
-						}
-						else if (c == '{')
-						{
-							isInFormatSpecifier = true;
-							formatString = string.Empty;
-							IsAlternating = false;
-						}
-						else
-						{
-							if (IsAlternating && c != ' ')
-							{
-								Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
-								Console.Write(c);
-							}
-							else
-							{
-								Console.Write(c);
-							}
-						}
-					}
-				}
+				Write(text[j], 0);
 				Console.ForegroundColor = resetColor;
 				IsAlternating = false;
 				Console.WriteLine();
 			}
 			Console.ForegroundColor = resetColor;
 		}
+
+		public static void Write(string text, int width = 0, bool skipInitialColor = false)
+		{
+			if (ColorScheme == null)
+				ColorScheme = ColorScheme.Default;
+
+			resetColor = ColorScheme.Text;
+			if(!skipInitialColor)
+				Console.ForegroundColor = resetColor;
+
+			var isInFormatSpecifier = false;
+			var formatString = string.Empty;
+			
+			for (var i = 0; i < text.Length; i++)
+			{
+				var c = text[i];
+				if (isInFormatSpecifier)
+				{
+					if (c == '}')
+					{
+						isInFormatSpecifier = false;
+						HandleFormat(formatString);
+					}
+					else
+					{
+						formatString += c;
+					}
+				}
+				else
+				{
+					if (c == '}' && i != text.Length && text[i + 1] == '}'
+						|| c == '{' && i != text.Length && text[i + 1] == '{')
+					{
+						if (IsAlternating && c != ' ')
+						{
+							Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
+							Console.Write(c);
+						}
+						else
+						{
+							Console.Write(c);
+						}
+						i++;
+					}
+					else if (c == '{')
+					{
+						isInFormatSpecifier = true;
+						formatString = string.Empty;
+						IsAlternating = false;
+					}
+					else
+					{
+						if (IsAlternating && c != ' ')
+						{
+							Console.ForegroundColor = AlternationColors[AlternationIndex++ % AlternationColors.Count];
+							Console.Write(c);
+						}
+						else
+						{
+							Console.Write(c);
+						}
+					}
+				}
+			}
+			for (var i = GetUnformattedText(text).Length; i++ < width; Console.Write(' ')) { }
+		}
+		public static string GetUnformattedText(string text)
+		{
+			StringBuilder r = new StringBuilder();
+			var isInFormatSpecifier = false;
+			for (var i = 0; i < text.Length; i++)
+			{
+				var c = text[i];
+				if (isInFormatSpecifier)
+				{
+					if (c == '}')
+					{
+						isInFormatSpecifier = false;
+					}
+				}
+				else
+				{
+					if (c == '{')
+					{
+						isInFormatSpecifier = true;
+					}
+					else
+						r.Append(c);
+				}
+			}
+			return r.ToString();
+		}
 		private static List<ConsoleColor> AlternationColors;
 		private static int AlternationIndex;
 		private static bool IsAlternating;
 		private static void HandleFormat(string formatString)
 		{
-			ConsoleColor literalColor;
-			if (Enum.TryParse<ConsoleColor>(formatString, true, out literalColor))
+			if (Enum.TryParse<ConsoleColor>(formatString, true, out var literalColor))
 			{
 				Console.ForegroundColor = literalColor;
 			}
@@ -143,6 +181,30 @@ namespace LittleConsoleHelper
 				}
 				AlternationIndex = 0;
 				IsAlternating = true;
+			}
+			else if (formatString.Equals("note", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Note;
+			}
+			else if (formatString.Equals("success", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Success;
+			}
+			else if (formatString.Equals("warning", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Warning;
+			}
+			else if (formatString.Equals("error", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Error;
+			}
+			else if (formatString.Equals("input", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.Input;
+			}
+			else if (formatString.Equals("secondaryinput", StringComparison.InvariantCultureIgnoreCase))
+			{
+				Console.ForegroundColor = ColorScheme.SecondaryInput;
 			}
 		}
 	}

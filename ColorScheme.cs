@@ -19,8 +19,14 @@ namespace LittleConsoleHelper
 		public ConsoleColor SelectedBackground { get; set; }
 		public ConsoleColor SecondaryText{ get; set; }
 		public ConsoleColor SecondaryBackground { get; set; }
+		public ConsoleColor Note { get; set; }
 		public ConsoleColor Header { get; set; }
 		public ConsoleColor SubHeader { get; set; }
+		public ConsoleColor Success { get; set; }
+		public ConsoleColor Warning { get; set; }
+		public ConsoleColor Error { get; set; }
+		public ConsoleColor Input { get; set; }
+		public ConsoleColor SecondaryInput { get; set; }
 
 		public static new ColorScheme Empty = new ColorScheme
 		{
@@ -31,7 +37,14 @@ namespace LittleConsoleHelper
 			SecondaryText = Console.ForegroundColor,
 			SecondaryBackground = Console.BackgroundColor,
 			Header = Console.ForegroundColor,
-			SubHeader = Console.ForegroundColor
+			SubHeader = Console.ForegroundColor,
+			Note = Console.ForegroundColor,
+			Success = Console.ForegroundColor,
+			Warning = Console.ForegroundColor,
+			Error = Console.ForegroundColor,
+			Input = Console.ForegroundColor,
+			SecondaryInput = Console.ForegroundColor
+			
 		};
 		public static new ColorScheme Default = new ColorScheme 
 		{ 
@@ -42,7 +55,13 @@ namespace LittleConsoleHelper
 			SelectedBackground = Configuration.ColorSelectedTextBG ?? Console.BackgroundColor, 
 			SecondaryBackground = Configuration.ColorSecondaryTextBG ?? Console.BackgroundColor,
 			Header = Configuration.ColorHeader ?? ConsoleColor.Yellow,
-			SubHeader = Configuration.ColorSubHeader ?? ConsoleColor.Yellow
+			SubHeader = Configuration.ColorSubHeader ?? ConsoleColor.Yellow,
+			Note = Configuration.ColorNote ?? ConsoleColor.DarkGray,
+			Success = Configuration.ColorSuccess ?? ConsoleColor.Green,
+			Warning = Configuration.ColorWarning ?? ConsoleColor.Yellow,
+			Error = Configuration.ColorError ?? ConsoleColor.Red,
+			Input = Configuration.ColorInput ?? ConsoleColor.Cyan,
+			SecondaryInput = Configuration.ColorSecondaryInput ?? ConsoleColor.DarkCyan
 		};
 	}
 }
