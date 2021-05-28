@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace LittleConsoleHelper
 {
@@ -38,7 +39,7 @@ namespace LittleConsoleHelper
 				Left = Console.CursorLeft;
 			}
 			if(refresh)
-			{ 
+			{
 				Clear();
 			}
 
@@ -54,17 +55,19 @@ namespace LittleConsoleHelper
 
 			Console.ForegroundColor = previousColor;
 			Console.BackgroundColor = previousBgColor;
-
-			CurrentMessages.Add(message);
+			
+			CurrentMessages.Add(fasterButNoFormat? message : Formatter.GetUnformattedText(message));
 		}
 
 		public static void Clear()
 		{
 			Console.SetCursorPosition(Left, Top);
+			StringBuilder clear = new StringBuilder();
 			for (int i = 0; i < CurrentMessages.Count; i++)
 			{
 				for (int j = 0; j < CurrentMessages[i].Length; j++)
-					Console.Write(" \b ");
+					clear.Append(" \b ");
+				Console.Write(clear.ToString());
 				Console.WriteLine();
 			}
 			Console.SetCursorPosition(Left, Top);
