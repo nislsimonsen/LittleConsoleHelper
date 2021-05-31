@@ -110,7 +110,8 @@ namespace LittleConsoleHelper
 			}
 			Console.Write(buffer);
 			buffer.Clear();
-			for (var i = GetUnformattedText(text).Length; i++ < width; Console.Write(' ')) { }
+			Console.Write(string.Empty.PadRight(width - GetUnformattedText(text).Length));
+			//for (var i = GetUnformattedText(text).Length; i++ < width; Console.Write(' ')) { }
 		}
 		public static string GetUnformattedText(string text)
 		{
