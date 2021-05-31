@@ -110,7 +110,8 @@ namespace LittleConsoleHelper
 			}
 			Console.Write(buffer);
 			buffer.Clear();
-			Console.Write(string.Empty.PadRight(width - GetUnformattedText(text).Length));
+			var numPaddingChars = Math.Max(0, width - GetUnformattedText(text).Length);
+			Console.Write(string.Empty.PadRight(numPaddingChars));
 			//for (var i = GetUnformattedText(text).Length; i++ < width; Console.Write(' ')) { }
 		}
 		public static string GetUnformattedText(string text)
