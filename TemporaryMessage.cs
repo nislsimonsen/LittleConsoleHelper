@@ -43,7 +43,8 @@ namespace LittleConsoleHelper
 			{
 				Clear();
 			}
-
+			if (Console.CursorTop >= (Console.BufferHeight-1))
+				Top--;
 			var previousColor = Console.ForegroundColor;
 			var previousBgColor = Console.BackgroundColor;
 			Console.ForegroundColor = colorScheme.Text;
@@ -62,7 +63,6 @@ namespace LittleConsoleHelper
 
 		public static void Clear()
 		{
-			LogClear(Left, Top);
 			Console.SetCursorPosition(Left, Top);
 			for (int i = 0; i < CurrentMessages.Count; i++)
 			{
@@ -77,9 +77,5 @@ namespace LittleConsoleHelper
 			CurrentMessages = new List<string>();
 		}
 
-		private static void LogClear(int left, int top)
-		{
-			File.AppendAllLines(@"c:\temp\clearlog.txt", new List<string> { DateTime.Now.ToString("HH:mm:ss") + " Left: " + left + " Top: " + top });
-		}
 	}
 }
