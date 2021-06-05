@@ -56,15 +56,16 @@ namespace LittleConsoleHelper
 			Console.ForegroundColor = previousColor;
 			Console.BackgroundColor = previousBgColor;
 			
-			CurrentMessages.Add(fasterButNoFormat? message : Formatter.GetUnformattedText(message));
+			CurrentMessages.Add(fasterButNoFormat ? message : Formatter.GetUnformattedText(message));
 		}
 
 		public static void Clear()
 		{
 			Console.SetCursorPosition(Left, Top);
-			StringBuilder clear = new StringBuilder();
 			for (int i = 0; i < CurrentMessages.Count; i++)
 			{
+				// todo: This can be a lot faster
+				StringBuilder clear = new StringBuilder();
 				for (int j = 0; j < CurrentMessages[i].Length; j++)
 					clear.Append(" \b ");
 				Console.Write(clear.ToString());
