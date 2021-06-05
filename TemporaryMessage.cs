@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace LittleConsoleHelper
@@ -61,6 +62,7 @@ namespace LittleConsoleHelper
 
 		public static void Clear()
 		{
+			LogClear(Left, Top);
 			Console.SetCursorPosition(Left, Top);
 			for (int i = 0; i < CurrentMessages.Count; i++)
 			{
@@ -73,6 +75,11 @@ namespace LittleConsoleHelper
 			}
 			Console.SetCursorPosition(Left, Top);
 			CurrentMessages = new List<string>();
+		}
+
+		private static void LogClear(int left, int top)
+		{
+			File.AppendAllLines(@"c:\temp\clearlog.txt", new List<string> { DateTime.Now.ToString("HH:mm:ss") + " Left: " + left + " Top: " + top });
 		}
 	}
 }
