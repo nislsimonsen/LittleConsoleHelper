@@ -13,6 +13,29 @@ namespace LittleConsoleHelper
 		private static bool IsInUpdatable { get; set; }
 
 		/// <summary>
+		/// Starts a new TemporaryMessage section. 
+		/// Similar to calling WriteLine(message, refresh = false, startNew = true);
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="colorScheme"></param>
+		/// <param name="fasterButNoFormat"></param>
+		public static void StartNew(string message, SimpleColorScheme colorScheme = null, bool fasterButNoFormat = false)
+		{
+			WriteLine(message, false, true, colorScheme, fasterButNoFormat);
+		}
+
+		/// <summary>
+		/// Clears an existing TemporaryMessage section
+		/// Similar to calling WriteLine(message, refresh = true, startNew = false);
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="colorScheme"></param>
+		/// <param name="fasterButNoFormat"></param>
+		public static void Refresh(string message, SimpleColorScheme colorScheme = null, bool fasterButNoFormat = false)
+		{
+			WriteLine(message, true, false, colorScheme, fasterButNoFormat);
+		}
+		/// <summary>
 		/// Writes a line to an updatable section. The section is terminated by calling Clear. Multiple calls to this method result in a multiline-section
 		/// Usage:
 		/// WriteLine(line1, colorScheme, false, true);
@@ -27,7 +50,7 @@ namespace LittleConsoleHelper
 		/// <param name="colorScheme">(optional) SimpleColorScheme which specifies text and background color</param>
 		/// <param name="refresh">(optional) clears the previous messages</param>
 		/// <param name="startNew">(optional) indicates that this call will start a new section</param>
-		public static void WriteLine(string message, SimpleColorScheme colorScheme = null, bool refresh = false, bool startNew = false, bool fasterButNoFormat = false)
+		public static void WriteLine(string message, bool refresh = false, bool startNew = false, SimpleColorScheme colorScheme = null, bool fasterButNoFormat = false)
 		{
 			if (colorScheme == null)
 				colorScheme = SimpleColorScheme.Empty;
