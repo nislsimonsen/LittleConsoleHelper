@@ -42,6 +42,8 @@ namespace LittleConsoleHelper
 
 		public static void Write(string text, int width = 0, bool skipInitialColor = false)
 		{
+			if (text == null)
+				return;
 			if (ColorScheme == null)
 				ColorScheme = ColorScheme.Default;
 
