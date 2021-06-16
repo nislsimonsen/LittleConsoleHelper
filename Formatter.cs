@@ -116,6 +116,8 @@ namespace LittleConsoleHelper
 		}
 		public static string GetUnformattedText(string text)
 		{
+			if (text == null)
+				return string.Empty;
 			StringBuilder r = new StringBuilder();
 			var isInFormatSpecifier = false;
 			for (var i = 0; i < text.Length; i++)
