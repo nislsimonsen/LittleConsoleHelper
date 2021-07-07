@@ -8,12 +8,19 @@ namespace LittleConsoleHelper.Commands
 {
 	public static class Command
 	{
-		public static bool Run<T, U>(string[] programArgs, RootCommand<U> rootCommand, T logger, U context)
-			where T : ILogger
+		public static bool Run<U>(string[] programArgs, RootCommand<U> rootCommand, ILogger logger, U context)
 		{
 			var commandParts = CLIParser.Parse(programArgs);
-			var commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands);
-			
+			var commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands, logger);
+
+			if (commandToRun == null)
+			{
+				var errorMessage = "Unable to parse supplied parameters to a command";
+				logger.LogError(errorMessage, programArgs);
+				Formatter.WriteLine("{error}" + errorMessage);
+				return false;
+			}
+
 			if (commandToRun.CaptureSubcommand)
 			{
 				try
@@ -36,7 +43,7 @@ namespace LittleConsoleHelper.Commands
 			return commandToRun.Execute(context, commandParts.Parameters, commandParts.Flags);
 		}
 
-		private static BaseCommand<U> GetCommandToRun<U>(List<string> commands, List<BaseCommand<U>> subCommands)
+		private static BaseCommand<U> GetCommandToRun<U>(List<string> commands, List<BaseCommand<U>> subCommands, ILogger logger)
 		{
 			BaseCommand<U> command = null;
 
@@ -50,7 +57,9 @@ namespace LittleConsoleHelper.Commands
 				command = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(sc.Name, null, sc)).ToList()).Value as BaseCommand<U>;
 			}
 			if (command == null)
-				throw new NullReferenceException(nameof(command));
+			{
+				return null;
+			}
 
 			if (command.IsExecutable)
 			{
@@ -59,10 +68,11 @@ namespace LittleConsoleHelper.Commands
 			else
 			{
 				if (commands.Any())
-					return GetCommandToRun(commands.ToArray()[1..^0].ToList(), command.SubCommands);
+					return GetCommandToRun(commands.ToArray()[1..^0].ToList(), command.SubCommands, logger);
 				else if (command.SubCommands.Any())
-					return GetCommandToRun(new List<string>(), command.SubCommands);
+					return GetCommandToRun(new List<string>(), command.SubCommands, logger);
 				else
+				{ }
 					throw new NullReferenceException($"Command {command.Name} is not executable and has no subcommands");
 				
 			}
