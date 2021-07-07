@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LittleConsoleHelper", "LittleConsoleHelper.csproj", "{ED31FDE1-0556-4DBA-A4D6-2DDC36A2B025}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCHTester", "..\LCHTester\LCHTester.csproj", "{5F2999E7-4FF6-4FB8-8F33-0D3A305CA9AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCHTester", "..\LCHTester\LCHTester.csproj", "{5F2999E7-4FF6-4FB8-8F33-0D3A305CA9AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCH.UnitTest", "..\LCH.UnitTest\LCH.UnitTest.csproj", "{9D4EB009-1CCD-4E86-8A06-2FE64F9B1AE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5F2999E7-4FF6-4FB8-8F33-0D3A305CA9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F2999E7-4FF6-4FB8-8F33-0D3A305CA9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F2999E7-4FF6-4FB8-8F33-0D3A305CA9AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D4EB009-1CCD-4E86-8A06-2FE64F9B1AE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D4EB009-1CCD-4E86-8A06-2FE64F9B1AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D4EB009-1CCD-4E86-8A06-2FE64F9B1AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D4EB009-1CCD-4E86-8A06-2FE64F9B1AE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
