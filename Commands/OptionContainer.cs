@@ -61,8 +61,8 @@ namespace LittleConsoleHelper.Commands
 			{
 				if (p && !p.Validate(out var errorMessage))
 				{
-					var error = $"Validation error for parameter '{p.Name}':";
-					Formatter.WriteLines(error, errorMessage);
+					var error = $"{{error}}Validation error for parameter '{p.Name}':";
+					Formatter.WriteLines(error, $"{{error}}{errorMessage}");
 					
 					return false;
 				}
