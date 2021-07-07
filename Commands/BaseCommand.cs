@@ -6,35 +6,13 @@ using System.Text;
 
 namespace LittleConsoleHelper.Commands
 {
-	//public abstract class BaseCommand : BaseCommand<NullLogger, NullContext>
-	//{ 
-	//	public virtual bool Execute(Dictionary<string, string> parameters, List<string> flags) 
-	//	{ 
-	//		return Execute(new NullContext(), parameters, flags); 
-	//	}
-	//}
-	public class RootCommand<UContext> : BaseCommand<UContext>
-	{
-		public override string Name => throw new NotImplementedException();
-
-		public RootCommand()
-			: base()
-		{
-		}
-		public RootCommand(params BaseCommand<UContext>[] subCommands)
-		{
-			SubCommands = subCommands.ToList();
-		}
-
-		public override List<BaseCommand<UContext>> SubCommands { get; set; }
-	}
-
+	
 	public abstract class BaseCommand<UContext>
 	{
 		public abstract string Name { get; }
 		public virtual bool IsExecutable { get; } = true;
-		public virtual string FriendlyName { get { return null; } }
-		public virtual string ShortDescription { get { return string.Empty; } }
+		public virtual string ShortHelpText { get; } = null;
+		public virtual List<string> LongHelpText { get; } = null;
 
 		protected List<BaseCommand<UContext>> _subCommands;
 		public virtual List<BaseCommand<UContext>> SubCommands 
@@ -73,10 +51,6 @@ namespace LittleConsoleHelper.Commands
 		/// </summary>
 		/// <returns></returns>
 		public virtual bool CaptureSubcommand{ get; set; } = false;
-
-		public virtual void DisplayHelp()
-		{
-		}
 	}
 
 	public class NullLogger : ILogger
