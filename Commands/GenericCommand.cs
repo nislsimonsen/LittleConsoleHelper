@@ -5,10 +5,9 @@ using System.Text;
 
 namespace LittleConsoleHelper.Commands
 {
-	public class GenericCommand<TLogger, UContext> : BaseCommand<TLogger, UContext>
-		where TLogger : ILogger
+	public class GenericCommand<UContext> : BaseCommand<UContext>
 	{
-		public GenericCommand(string name, List<BaseCommand<TLogger, UContext>> subCommands)
+		public GenericCommand(string name, List<BaseCommand<UContext>> subCommands)
 		{
 			_name = name;
 			_isExecutable = false;

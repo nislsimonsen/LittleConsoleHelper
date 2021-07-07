@@ -8,13 +8,12 @@ namespace LittleConsoleHelper.Commands
 {
 	public static class Command
 	{
-		public static bool Run<T, U>(string[] programArgs, RootCommand<T, U> rootCommand, T logger, U context)
+		public static bool Run<T, U>(string[] programArgs, RootCommand<U> rootCommand, T logger, U context)
 			where T : ILogger
 		{
 			var commandParts = CLIParser.Parse(programArgs);
-
 			var commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands);
-			Console.WriteLine(commandToRun.Name);
+			
 			if (commandToRun.CaptureSubcommand)
 			{
 				try
@@ -31,14 +30,15 @@ namespace LittleConsoleHelper.Commands
 					throw new ArgumentException($"Unable to correctly parse subcommand(s) from command list: {string.Join(',', commandParts.Commands.ToArray())}", e);
 				}
 			}
+			
 			commandToRun.SetLogger(logger);
+
 			return commandToRun.Execute(context, commandParts.Parameters, commandParts.Flags);
 		}
 
-		private static BaseCommand<T, U> GetCommandToRun<T, U>(List<string> commands, List<BaseCommand<T, U>> subCommands)
-			where T : ILogger
+		private static BaseCommand<U> GetCommandToRun<U>(List<string> commands, List<BaseCommand<U>> subCommands)
 		{
-			BaseCommand<T, U> command = null;
+			BaseCommand<U> command = null;
 
 			if (commands.Any())
 			{
@@ -47,7 +47,7 @@ namespace LittleConsoleHelper.Commands
 			}
 			else
 			{
-				command = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(sc.Name, null, sc)).ToList()).Value as BaseCommand<T, U>;
+				command = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(sc.Name, null, sc)).ToList()).Value as BaseCommand<U>;
 			}
 			if (command == null)
 				throw new NullReferenceException(nameof(command));

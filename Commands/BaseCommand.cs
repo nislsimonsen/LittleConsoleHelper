@@ -13,8 +13,7 @@ namespace LittleConsoleHelper.Commands
 	//		return Execute(new NullContext(), parameters, flags); 
 	//	}
 	//}
-	public class RootCommand<TLogger, UContext> : BaseCommand<TLogger, UContext>
-		where TLogger : ILogger
+	public class RootCommand<UContext> : BaseCommand<UContext>
 	{
 		public override string Name => throw new NotImplementedException();
 
@@ -23,29 +22,28 @@ namespace LittleConsoleHelper.Commands
 			: base()
 		{
 		}
-		public RootCommand(params BaseCommand<TLogger, UContext>[] subCommands)
+		public RootCommand(params BaseCommand<UContext>[] subCommands)
 		{
 			SubCommands = subCommands.ToList();
 		}
 
-		public override List<BaseCommand<TLogger, UContext>> SubCommands { get; set; }
+		public override List<BaseCommand<UContext>> SubCommands { get; set; }
 	}
 
-	public abstract class BaseCommand<TLogger, UContext>
-		where TLogger : ILogger
+	public abstract class BaseCommand<UContext>
 	{
 		public abstract string Name { get; }
 		public abstract bool IsExecutable { get; }
 		public virtual string FriendlyName { get { return null; } }
 		public virtual string ShortDescription { get { return string.Empty; } }
 
-		protected List<BaseCommand<TLogger, UContext>> _subCommands;
-		public virtual List<BaseCommand<TLogger, UContext>> SubCommands 
+		protected List<BaseCommand<UContext>> _subCommands;
+		public virtual List<BaseCommand<UContext>> SubCommands 
 		{ 
 			get 
 			{ 
 				if(_subCommands == null)
-					_subCommands = new List<BaseCommand<TLogger, UContext>>();
+					_subCommands = new List<BaseCommand<UContext>>();
 				return _subCommands;
 			} 
 			set 
@@ -53,8 +51,8 @@ namespace LittleConsoleHelper.Commands
 				_subCommands = value;
 			} 
 		}
-		protected TLogger Logger { get; set; }
-		public void SetLogger(TLogger logger)
+		protected ILogger Logger { get; set; }
+		public void SetLogger(ILogger logger)
 		{
 			Logger = logger;
 		}
