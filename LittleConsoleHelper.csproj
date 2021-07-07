@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.8.1</Version>
+    <Version>1.8.2.1</Version>
     <Authors>Nis L. Simonsen</Authors>
     <Description>When you have no choice but to build a UI in a console app (cmd/ps), LittleConsoleHelper makes displaying menus or just getting user input just a little bit easier</Description>
-    <PackageReleaseNotes>Removed variable ILogger type</PackageReleaseNotes>
+    <PackageReleaseNotes>default implementation for BaseCommand.IsExecutable = true</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -17,7 +17,6 @@ namespace LittleConsoleHelper.Commands
 	{
 		public override string Name => throw new NotImplementedException();
 
-		public override bool IsExecutable => throw new NotImplementedException();
 		public RootCommand()
 			: base()
 		{
@@ -33,7 +32,7 @@ namespace LittleConsoleHelper.Commands
 	public abstract class BaseCommand<UContext>
 	{
 		public abstract string Name { get; }
-		public abstract bool IsExecutable { get; }
+		public virtual bool IsExecutable { get; } = true;
 		public virtual string FriendlyName { get { return null; } }
 		public virtual string ShortDescription { get { return string.Empty; } }
 
