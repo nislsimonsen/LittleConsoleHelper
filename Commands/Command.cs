@@ -11,7 +11,17 @@ namespace LittleConsoleHelper.Commands
 		public static bool Run<U>(string[] programArgs, RootCommand<U> rootCommand, ILogger logger, U context)
 		{
 			var commandParts = CLIParser.Parse(programArgs);
-			var commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands, logger);
+			
+			BaseCommand<U> commandToRun;
+			var helpCommand = rootCommand.SubCommands.FirstOrDefault(c => c.Name.Equals("help", StringComparison.InvariantCultureIgnoreCase));
+			if (commandParts.Flags.Contains("?") && helpCommand != null)
+			{
+				commandToRun = helpCommand;
+			}
+			else
+			{
+				commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands, logger);
+			}
 
 			if (commandToRun == null)
 			{
