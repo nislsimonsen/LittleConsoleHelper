@@ -25,10 +25,11 @@ namespace LittleConsoleHelper.Commands
 		public override List<string> LongHelpText => new List<string> 
 		{
 			"The help command can provide instructions for given commands.",
-			"Invoke it by prepending 'help' before the command specifier or by appending a /? flag",
-			"E.g.",
-			"(programName) help (commandName) [(subCommandName)]",
-			"(programName) (commandName [(subCommandName)] /?"
+			"Invoke it by prepending 'help' before the command or by appending a /? flag",
+			"E.g. one of:",
+			$"{{selectedtext}}{ProgramCommandName} help commandName",
+			$"{{selectedtext}}{ProgramCommandName} commandName /?",
+			$"{{selectedtext}}{ProgramCommandName} commandName subCommandName /?",
 		};
 		public override bool Execute(T context, Dictionary<string, string> parameters, List<string> flags)
 		{
@@ -68,14 +69,14 @@ namespace LittleConsoleHelper.Commands
 					var commandPath = string.Join(' ', path.ToArray());
 					var commandOptions = command.GetEmptyExecutionOptionsForHelp();
 
-					string usageLabel = "{text}usage";
+					string usageLabel = "{secondarytext}usage:";
 					string usage = "{selectedtext}" + commandPath;
 
 					
 
 					if (commandOptions == null)
 					{
-						Formatter.WriteLines(usageLabel, usage, "");
+						Formatter.WriteLines(usageLabel + " " + usage, "");
 
 						if (command.LongHelpText != null)
 							Formatter.WriteLines(command.LongHelpText.ToArray());
@@ -104,7 +105,7 @@ namespace LittleConsoleHelper.Commands
 						usage += (requiredParametersUsage.Length > 0 ? " " : string.Empty) + optionalParametersUsage;
 						usage += (optionalParametersUsage.Length > 0 ? " " : string.Empty) + flagsUsage;
 
-						Formatter.WriteLines(usageLabel, usage, "", "Parameters and flags:");
+						Formatter.WriteLines(usageLabel + " " + usage, "", "Parameters and flags:");
 
 						var columns = new List<string> { "Name", "Required", "Type", "Token(s)" };
 						var values = new List<List<string>>();
@@ -114,7 +115,10 @@ namespace LittleConsoleHelper.Commands
 						Table.Display(new TableData(columns, values));
 
 						if (command.LongHelpText != null)
+						{
+							Formatter.WriteLine(string.Empty);
 							Formatter.WriteLines(command.LongHelpText.ToArray());
+						}
 					}
 				}
 			}

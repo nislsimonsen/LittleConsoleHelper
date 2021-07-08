@@ -32,6 +32,8 @@ namespace LittleConsoleHelper
 		{
 			for (var j = 0; j < text.Length; j++)
 			{
+				if (text[j] == null)
+					text[j] = string.Empty;
 				Write(text[j], 0);
 				Console.ForegroundColor = resetColor;
 				IsAlternating = false;
@@ -48,7 +50,7 @@ namespace LittleConsoleHelper
 				ColorScheme = ColorScheme.Default;
 
 			resetColor = ColorScheme.Text;
-			if(!skipInitialColor)
+			if (!skipInitialColor)
 				Console.ForegroundColor = resetColor;
 
 			var isInFormatSpecifier = false;
