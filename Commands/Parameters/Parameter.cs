@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LittleConsoleHelper.Commands
+namespace LittleConsoleHelper.Commands.Parameters
 {
 	public class Parameter : BaseOption
 	{

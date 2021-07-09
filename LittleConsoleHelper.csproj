@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.8.4.1</Version>
+    <Version>1.8.4.2</Version>
     <Authors>Nis L. Simonsen</Authors>
     <Description>When you have no choice but to build a UI in a console app (cmd/ps), LittleConsoleHelper makes displaying menus or just getting user input just a little bit easier</Description>
-    <PackageReleaseNotes>Implemented standard Help command</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed Parameter class namespace</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
