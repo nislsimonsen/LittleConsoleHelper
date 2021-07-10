@@ -40,6 +40,17 @@ namespace LittleConsoleHelper.Commands
 		}
 		public abstract List<Flag> Flags { get; }
 		public abstract List<Parameter> Parameters { get; }
+		public List<BaseOption> Options 
+		{
+			get
+			{
+				var r = new List<BaseOption>();
+				r.AddRange(Flags.Cast<BaseOption>().ToList());
+				r.AddRange(Parameters.Cast<BaseOption>().ToList());
+				return r;
+				
+			}
+		}
 		protected List<string> CreationFlags { get; set; }
 		protected Dictionary<string, string> CreationParameters { get; set; }
 

@@ -8,9 +8,10 @@ namespace LittleConsoleHelper.Commands
 	{
 		public string Name { get; set; }
 		public List<string> Tokens { get; set; }
-		public string ShortDescription { get; set; }
+		
 		public virtual bool IncludeInHelp { get; set; } = true;
-		public string ExtendedHelp { get; set; } = "No description available";
+		public string ShortDescription { get; set; } = "No description available";
+		public List<string> ExtendedHelp { get; set; } = new List<string> { "No extended help available.", "Ipsum lorem dolor sit amet." };
 
 	}
 }

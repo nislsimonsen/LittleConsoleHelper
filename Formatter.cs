@@ -24,6 +24,10 @@ namespace LittleConsoleHelper
 			Console.ReadLine();
 			Console.SetCursorPosition(0, Console.CursorTop - 1);
 		}
+		public static void WriteLine()
+		{
+			WriteLines(string.Empty);
+		}
 		public static void WriteLine(string text)
 		{
 			WriteLines(text);

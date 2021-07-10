@@ -15,10 +15,14 @@ namespace LittleConsoleHelper
 				tableStyle = TableStyleDefault;
 			
 			var columnLengths = new int[table.ColumnHeaders.Count];
+			bool anyHeaders = false;
 			for (var i = 0; i < table.ColumnHeaders.Count; i++)
 			{
 				var chl = Formatter.GetUnformattedText(table.ColumnHeaders[i]).Length;
+				if (chl > 0)
+					anyHeaders = true;
 				columnLengths[i] = Math.Max(columnLengths[i], chl);
+				
 			}
 			for (var i = 0; i < table.Values.Count; i++)
 			{
@@ -45,17 +49,20 @@ namespace LittleConsoleHelper
 				borderRow = string.Empty.PadRight(totalWidth, '-');
 			}
 
-			Console.ForegroundColor = tableStyle.HeaderColor;
-			for (var i = 0; i < table.ColumnHeaders.Count; i++)
+			if (anyHeaders)
 			{
-				Formatter.Write(table.ColumnHeaders[i], columnLengths[i] + tableStyle.Padding, true);
-			}
-			Formatter.WriteLine(string.Empty);
+				Console.ForegroundColor = tableStyle.HeaderColor;
+				for (var i = 0; i < table.ColumnHeaders.Count; i++)
+				{
+					Formatter.Write(table.ColumnHeaders[i], columnLengths[i] + tableStyle.Padding, true);
+				}
+				Formatter.WriteLine(string.Empty);
 
-			Console.ForegroundColor = tableStyle.BorderColor;
-			if ((tableStyle.BorderStyle & TableBorderStyle.HeaderSeperated) == TableBorderStyle.HeaderSeperated)
-			{
-				Formatter.WriteLine(borderRow);
+				Console.ForegroundColor = tableStyle.BorderColor;
+				if ((tableStyle.BorderStyle & TableBorderStyle.HeaderSeperated) == TableBorderStyle.HeaderSeperated)
+				{
+					Formatter.WriteLine(borderRow);
+				}
 			}
 
 			for (var i = 0; i < table.Values.Count; i++)
