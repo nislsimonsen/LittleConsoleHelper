@@ -130,7 +130,7 @@ namespace LittleConsoleHelper.Commands
 
 							data.Add(new List<string> { "Purpose", optionToProvideHelpFor.ShortDescription });
 
-							Formatter.WriteLine($"{{secondarytext}}Displaying help for the {{selectedtext}}{optionToProvideHelpFor.Name}{{reset}} option");
+							Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{optionToProvideHelpFor.Name}{{reset}} option", string.Empty);
 							Table.Display(new TableData(headers, data));
 
 							Formatter.WriteLine();
