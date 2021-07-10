@@ -128,6 +128,11 @@ namespace LittleConsoleHelper.Commands
 								usage += " /" + tokenToProvideHelpFor;
 							data.Add(new List<string> { "Usage", usage });
 
+							if (tokenIsParameter)
+							{
+								Parameter parameterToProvideHelpFor = optionToProvideHelpFor as Parameter;
+								data.Add(new List<string> { "Parameter type", parameterToProvideHelpFor.ValueTypeDescription });
+							}
 							data.Add(new List<string> { "Purpose", optionToProvideHelpFor.ShortDescription });
 
 							Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{optionToProvideHelpFor.Name}{{reset}} option", string.Empty);
