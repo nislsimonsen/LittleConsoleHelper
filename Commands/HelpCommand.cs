@@ -138,6 +138,8 @@ namespace LittleConsoleHelper.Commands
 						}
 						else
 						{
+							Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{command.FriendlyName}{{reset}} command", string.Empty);
+
 							var p = commandOptions.Parameters.Where(p => p.IncludeInHelp).OrderBy(p => p.Required).ThenBy(p => p.Name).ToList();
 							var f = commandOptions.Flags.Where(p => p.IncludeInHelp).OrderBy(f => f.Name).ToList();
 							var allOptions = new List<BaseOption>().Union(p).Union(f);
