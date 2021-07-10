@@ -41,15 +41,7 @@ namespace LittleConsoleHelper.Commands
 
 			if (!options.SubCommand || options.SubCommand.Value.Length == 0)
 			{
-				Formatter.WriteLines("{header}" + ProgramName + " help{/header}", "{secondarytext}Version: {selectedtext}" + ProgramVersion);
-				Formatter.WriteLines("", "{secondarytext}Available commands:{reset}", "");
-
-				foreach (var command in RootCommand.SubCommands)
-				{
-					Formatter.WriteLines($"  {{selectedtext}}{command.Name,-15}{{reset}}{command.ShortHelpText}");
-				}
-				Formatter.WriteLines("", "----------------------------------", "");
-				Formatter.WriteLines("{selectedtext}" + ProgramCommandName + " help [command name]  {text}Displays further help on the specified command");
+				DisplayGenericProgramHelp();
 			}
 			else
 			{
@@ -78,20 +70,7 @@ namespace LittleConsoleHelper.Commands
 
 					if (commandOptions == null)
 					{
-						Formatter.WriteLines(usageLabel + " " + usage, "");
-
-						if (command.LongHelpText != null)
-							Formatter.WriteLines(command.LongHelpText.ToArray());
-
-						if (command.SubCommands.Count > 0)
-						{
-							Formatter.WriteLines("{secondarytext}Available subcommands", "");
-
-							var columns = new List<string> { "Command", "Description" };
-							var values = new List<List<string>>();
-							command.SubCommands.ForEach(sc => values.Add(new List<string> { $"{{selectedtext}}{commandPath} {sc.Name.ToLower()}", sc.ShortHelpText }));
-							Table.Display(new TableData(columns, values));
-						}
+						DisplayHelpForCommandWithNoOptions(command, commandPath, usageLabel, usage);
 					}
 					else
 					{
@@ -112,65 +91,13 @@ namespace LittleConsoleHelper.Commands
 							tokenIsFlag = true;
 						}
 
-
 						if (optionToProvideHelpFor != null)
 						{
-							var headers = new List<string> { string.Empty, string.Empty };
-							var data = new List<List<string>>();
-
-							data.Add(new List<string> { "Command", command.FriendlyName });
-
-							data.Add(new List<string> { "Option", optionToProvideHelpFor.Name });
-
-							if (tokenIsParameter)
-								usage += " -" + tokenToProvideHelpFor + " " + "(value)";
-							else if (tokenIsFlag)
-								usage += " /" + tokenToProvideHelpFor;
-							data.Add(new List<string> { "Usage", usage });
-
-							if (tokenIsParameter)
-							{
-								Parameter parameterToProvideHelpFor = optionToProvideHelpFor as Parameter;
-								data.Add(new List<string> { "Parameter type", parameterToProvideHelpFor.ValueTypeDescription });
-							}
-							data.Add(new List<string> { "Purpose", optionToProvideHelpFor.ShortDescription });
-
-							Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{optionToProvideHelpFor.Name}{{reset}} option", string.Empty);
-							Table.Display(new TableData(headers, data));
-
-							Formatter.WriteLine();
-							Formatter.WriteLines(optionToProvideHelpFor.ExtendedHelp.ToArray());
+							DisplayHelpForSpecificOption(command, usage, tokenToProvideHelpFor, optionToProvideHelpFor, tokenIsParameter, tokenIsFlag);
 						}
 						else
 						{
-							Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{command.FriendlyName}{{reset}} command", string.Empty);
-
-							var p = commandOptions.Parameters.Where(p => p.IncludeInHelp).OrderBy(p => p.Required).ThenBy(p => p.Name).ToList();
-							var f = commandOptions.Flags.Where(p => p.IncludeInHelp).OrderBy(f => f.Name).ToList();
-							var allOptions = new List<BaseOption>().Union(p).Union(f);
-
-							var requiredParametersUsage = String.Join(' ', p.Where(p => p.Required).Select(p => "-" + p.Tokens.First().ToLower() + " (value)").ToArray());
-							var optionalParametersUsage = String.Join(' ', p.Where(p => !p.Required).Select(p => "[-" + p.Tokens.First().ToLower() + " (value)]").ToArray());
-							var flagsUsage = String.Join(' ', f.Select(p => "[/" + p.Tokens.First().ToLower() + "]").ToArray());
-
-							usage += " " + requiredParametersUsage;
-							usage += (requiredParametersUsage.Length > 0 ? " " : string.Empty) + optionalParametersUsage;
-							usage += (optionalParametersUsage.Length > 0 ? " " : string.Empty) + flagsUsage;
-
-							Formatter.WriteLines(usageLabel + " " + usage, "", "Parameters and flags:");
-
-							var columns = new List<string> { "Name", "Required", "Type", "Token(s)" };
-							var values = new List<List<string>>();
-							p.Where(p => p.Required).ToArray().ToList().ForEach(p => values.Add(new List<string> { p.Name, "yes", p.ValueTypeName, "-" + string.Join(" -", p.Tokens) }));
-							p.Where(p => !p.Required).ToArray().ToList().ForEach(p => values.Add(new List<string> { p.Name, "no", p.ValueTypeName, "-" + string.Join(" -", p.Tokens) }));
-							f.ForEach(f => values.Add(new List<string> { f.Name, "no", string.Empty, "/" + string.Join(" /", f.Tokens) }));
-							Table.Display(new TableData(columns, values));
-
-							if (command.LongHelpText != null)
-							{
-								Formatter.WriteLine(string.Empty);
-								Formatter.WriteLines(command.LongHelpText.ToArray());
-							}
+							DisplayHelpForCommandWithOptions(command, commandOptions, usageLabel, usage);
 						}
 					}
 				}
@@ -178,6 +105,94 @@ namespace LittleConsoleHelper.Commands
 			return true;
 		}
 
+		private void DisplayGenericProgramHelp()
+		{
+			Formatter.WriteLines("{header}" + ProgramName + " help{/header}", "{secondarytext}Version: {selectedtext}" + ProgramVersion);
+			Formatter.WriteLines("", "{secondarytext}Available commands:{reset}", "");
+
+			foreach (var command in RootCommand.SubCommands)
+			{
+				Formatter.WriteLines($"  {{selectedtext}}{command.Name,-15}{{reset}}{command.ShortHelpText}");
+			}
+			Formatter.WriteLines("", "----------------------------------", "");
+			Formatter.WriteLines("{selectedtext}" + ProgramCommandName + " help [command name]  {text}Displays further help on the specified command");
+		}
+		private static void DisplayHelpForCommandWithNoOptions(BaseCommand<T> command, string commandPath, string usageLabel, string usage)
+		{
+			Formatter.WriteLines(usageLabel + " " + usage, "");
+
+			if (command.LongHelpText != null)
+				Formatter.WriteLines(command.LongHelpText.ToArray());
+
+			if (command.SubCommands.Count > 0)
+			{
+				Formatter.WriteLines("{secondarytext}Available subcommands", "");
+
+				var columns = new List<string> { "Command", "Description" };
+				var values = new List<List<string>>();
+				command.SubCommands.ForEach(sc => values.Add(new List<string> { $"{{selectedtext}}{commandPath} {sc.Name.ToLower()}", sc.ShortHelpText }));
+				Table.Display(new TableData(columns, values));
+			}
+		}
+		private static void DisplayHelpForCommandWithOptions(BaseCommand<T> command, OptionContainer commandOptions, string usageLabel, string usage)
+		{
+			Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{command.FriendlyName}{{reset}} command", string.Empty);
+
+			var p = commandOptions.Parameters.Where(p => p.IncludeInHelp).OrderBy(p => p.Required).ThenBy(p => p.Name).ToList();
+			var f = commandOptions.Flags.Where(p => p.IncludeInHelp).OrderBy(f => f.Name).ToList();
+			var allOptions = new List<BaseOption>().Union(p).Union(f);
+
+			var requiredParametersUsage = String.Join(' ', p.Where(p => p.Required).Select(p => "-" + p.Tokens.First().ToLower() + " (value)").ToArray());
+			var optionalParametersUsage = String.Join(' ', p.Where(p => !p.Required).Select(p => "[-" + p.Tokens.First().ToLower() + " (value)]").ToArray());
+			var flagsUsage = String.Join(' ', f.Select(p => "[/" + p.Tokens.First().ToLower() + "]").ToArray());
+
+			usage += " " + requiredParametersUsage;
+			usage += (requiredParametersUsage.Length > 0 ? " " : string.Empty) + optionalParametersUsage;
+			usage += (optionalParametersUsage.Length > 0 ? " " : string.Empty) + flagsUsage;
+
+			Formatter.WriteLines(usageLabel + " " + usage, "", "Parameters and flags:");
+
+			var columns = new List<string> { "Name", "Required", "Type", "Token(s)" };
+			var values = new List<List<string>>();
+			p.Where(p => p.Required).ToArray().ToList().ForEach(p => values.Add(new List<string> { p.Name, "yes", p.ValueTypeName, "-" + string.Join(" -", p.Tokens) }));
+			p.Where(p => !p.Required).ToArray().ToList().ForEach(p => values.Add(new List<string> { p.Name, "no", p.ValueTypeName, "-" + string.Join(" -", p.Tokens) }));
+			f.ForEach(f => values.Add(new List<string> { f.Name, "no", string.Empty, "/" + string.Join(" /", f.Tokens) }));
+			Table.Display(new TableData(columns, values));
+
+			if (command.LongHelpText != null)
+			{
+				Formatter.WriteLine(string.Empty);
+				Formatter.WriteLines(command.LongHelpText.ToArray());
+			}
+		}
+		private static void DisplayHelpForSpecificOption(BaseCommand<T> command, string usage, string tokenToProvideHelpFor, BaseOption optionToProvideHelpFor, bool tokenIsParameter, bool tokenIsFlag)
+		{
+			var headers = new List<string> { string.Empty, string.Empty };
+			var data = new List<List<string>>();
+
+			data.Add(new List<string> { "Command", command.FriendlyName });
+
+			data.Add(new List<string> { "Option", optionToProvideHelpFor.Name });
+
+			if (tokenIsParameter)
+				usage += " -" + tokenToProvideHelpFor + " " + "(value)";
+			else if (tokenIsFlag)
+				usage += " /" + tokenToProvideHelpFor;
+			data.Add(new List<string> { "Usage", usage });
+
+			if (tokenIsParameter)
+			{
+				Parameter parameterToProvideHelpFor = optionToProvideHelpFor as Parameter;
+				data.Add(new List<string> { "Parameter type", parameterToProvideHelpFor.ValueTypeDescription });
+			}
+			data.Add(new List<string> { "Purpose", optionToProvideHelpFor.ShortDescription });
+
+			Formatter.WriteLines($"{{secondarytext}}Displaying help for the {{selectedtext}}{optionToProvideHelpFor.Name}{{reset}} option", string.Empty);
+			Table.Display(new TableData(headers, data));
+
+			Formatter.WriteLine();
+			Formatter.WriteLines(optionToProvideHelpFor.ExtendedHelp.ToArray());
+		}
 	}
 	public class HelpOptions : OptionContainer
 	{
