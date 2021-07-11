@@ -91,7 +91,7 @@ namespace LittleConsoleHelper.Commands
 							tokenIsFlag = true;
 						}
 
-						if (optionToProvideHelpFor != null)
+						if (optionToProvideHelpFor != null && optionToProvideHelpFor.IncludeInHelp)
 						{
 							DisplayHelpForSpecificOption(command, usage, tokenToProvideHelpFor, optionToProvideHelpFor, tokenIsParameter, tokenIsFlag);
 						}

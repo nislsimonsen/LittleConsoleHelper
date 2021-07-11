@@ -24,6 +24,8 @@ namespace LittleConsoleHelper.Commands.Parameters
 		}
 		private bool? InternalParse()
 		{
+			if (Value == null)
+				return null;
 			var variations = new List<(string token, bool value)>
 			{
 				("true", true),
@@ -52,6 +54,6 @@ namespace LittleConsoleHelper.Commands.Parameters
 				Value = value.ToString();
 			}
 		}
-
+		
 	}
 }

@@ -28,6 +28,13 @@ namespace LittleConsoleHelper.Commands.Parameters
 
 		public Parameter(string name, string defaultValue, bool required, params string[] tokens)
 		{
+			if (name == null)
+				throw new ArgumentNullException(nameof(name));
+			if (required && defaultValue != null)
+				throw new ArgumentException("Cannot set default value with required parameter");
+			if (tokens.Length == 0)
+				throw new ArgumentException(nameof(tokens));
+
 			Name = name;
 			DefaultValue = defaultValue;
 			Required = required;

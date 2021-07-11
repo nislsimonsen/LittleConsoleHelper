@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LittleConsoleHelper.Commands
 {
-	static class CLIParser
+	public static class CLIParser
 	{
-		internal static CLIParserResult Parse(string[] args)
+		public static CLIParserResult Parse(params string[] args)
 		{
+			if (args.Any(a => a == null))
+				throw new ArgumentNullException(nameof(args));
+
 			var r = new CLIParserResult();
 
 			for (var i = 0; i < args.Length; i++)
@@ -42,7 +46,7 @@ namespace LittleConsoleHelper.Commands
 		}
 
 	}
-	class CLIParserResult
+	public class CLIParserResult
 	{
 		public List<string> Commands { get; set; }
 		public Dictionary<string, string> Parameters { get; set; }

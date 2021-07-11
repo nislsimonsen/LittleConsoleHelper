@@ -11,7 +11,7 @@ namespace LittleConsoleHelper.Commands
 		
 		public virtual bool IncludeInHelp { get; set; } = true;
 		public string ShortDescription { get; set; } = "No description available";
-		public List<string> ExtendedHelp { get; set; } = new List<string> { "No extended help for this option is available." };
+		public List<string> ExtendedHelp { get; set; } = new List<string> { };
 
 	}
 }
