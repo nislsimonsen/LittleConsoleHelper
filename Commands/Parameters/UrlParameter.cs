@@ -6,7 +6,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 {
 	public class UrlParameter : Parameter
 	{
-		public override string ValueTypeName { get; protected set; } = "Url";
+		public override string ValueTypeName { get; set; } = "Url";
 		public UrlParameter(string name, string defaultValue, bool required, params string[] tokens)
 			: base(name, defaultValue, required, tokens)
 		{ }

@@ -6,7 +6,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 {
 	public class BoolParameter : Parameter
 	{
-		public override string ValueTypeName { get; protected set; } = "Boolean";
+		public override string ValueTypeName { get; set; } = "Boolean";
 
 		public BoolParameter(string name, string defaultValue, bool required, params string[] tokens)
 			: base(name, defaultValue, required, tokens)

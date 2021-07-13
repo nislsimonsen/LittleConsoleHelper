@@ -13,7 +13,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 			{
 				return typeof(T).ToString();
 			}
-			protected set { }
+			set { }
 		}
 		public EnumParameter(string name, string defaultValue, bool required, params string[] tokens)
 			: base(name, defaultValue, required, tokens)

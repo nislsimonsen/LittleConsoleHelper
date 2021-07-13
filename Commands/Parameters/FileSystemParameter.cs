@@ -71,7 +71,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 		{
 			FileValidation = fileValidation;
 		}
-		public override string ValueTypeName { get; protected set; } = "File path";
+		public override string ValueTypeName { get; set; } = "File path";
 
 		public override bool Validate(out string validationError)
 		{
@@ -110,7 +110,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 		public DirectoryParameter(string name, string defaultValue, bool required, FileSystemValidationMode folderValidation, params string[] tokens) : base(name, defaultValue, required, folderValidation, tokens)
 		{
 		}
-		public override string ValueTypeName { get; protected set; } = "Directory path";
+		public override string ValueTypeName { get; set; } = "Directory path";
 		public override bool Validate(out string validationError)
 		{
 			var baseValid = base.Validate(out validationError);

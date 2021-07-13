@@ -24,7 +24,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 				_value = value;
 			}
 		}
-		public virtual string ValueTypeName { get; protected set; } = "String";
+		public virtual string ValueTypeName { get; set; } = "String";
 		public virtual string ValueTypeDescription { get { return ValueTypeName; } }
 
 		public Parameter(string name, string defaultValue, bool required, params string[] tokens)

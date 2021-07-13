@@ -6,7 +6,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 {
 	public class IntParameter : Parameter
 	{
-		public override string ValueTypeName { get; protected set; } = "Integer";
+		public override string ValueTypeName { get; set; } = "Integer";
 		public IntParameter(string name, string defaultValue, bool required, params string[] tokens)
 			: base(name, defaultValue, required, tokens)
 		{ }
