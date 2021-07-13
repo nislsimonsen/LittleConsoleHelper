@@ -14,9 +14,10 @@ namespace LittleConsoleHelper.Commands.Parameters
 		{
 			get
 			{
-				if (_value == null && DefaultValue != null)
-					return DefaultValue;
-				return _value;
+				return _value ?? DefaultValue;
+				//if (_value == null && DefaultValue != null)
+				//	return DefaultValue;
+				//return _value;
 			}
 			set
 			{

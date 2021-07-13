@@ -62,47 +62,52 @@ namespace LittleConsoleHelper.Commands
 
 				if (command != null)
 				{
-					var commandPath = string.Join(' ', path.ToArray());
-					var commandOptions = command.GetEmptyExecutionOptionsForHelp();
-
-					string usageLabel = "{secondarytext}usage:";
-					string usage = "{selectedtext}" + commandPath;
-
-					if (commandOptions == null)
-					{
-						DisplayHelpForCommandWithNoOptions(command, commandPath, usageLabel, usage);
-					}
-					else
-					{
-						string tokenToProvideHelpFor = null;
-						BaseOption optionToProvideHelpFor = null;
-						bool tokenIsParameter = false;
-						bool tokenIsFlag = false;
-						if (parameters.Any())
-						{
-							tokenToProvideHelpFor = parameters.First().Key;
-							optionToProvideHelpFor = commandOptions.Parameters.FirstOrDefault(o => o.Tokens.Contains(tokenToProvideHelpFor));
-							tokenIsParameter = true;
-						}
-						else if (flags.Any())
-						{
-							tokenToProvideHelpFor = flags.First();
-							optionToProvideHelpFor = commandOptions.Flags.FirstOrDefault(o => o.Tokens.Contains(tokenToProvideHelpFor));
-							tokenIsFlag = true;
-						}
-
-						if (optionToProvideHelpFor != null && optionToProvideHelpFor.IncludeInHelp)
-						{
-							DisplayHelpForSpecificOption(command, usage, tokenToProvideHelpFor, optionToProvideHelpFor, tokenIsParameter, tokenIsFlag);
-						}
-						else
-						{
-							DisplayHelpForCommandWithOptions(command, commandOptions, usageLabel, usage);
-						}
-					}
+					DisplayHelpFormCommandOrCommandToken(parameters, flags, command, path);
 				}
 			}
 			return true;
+		}
+
+		private static void DisplayHelpFormCommandOrCommandToken(Dictionary<string, string> parameters, List<string> flags, BaseCommand<T> command, List<string> path)
+		{
+			var commandPath = string.Join(' ', path.ToArray());
+			var commandOptions = command.GetEmptyExecutionOptionsForHelp();
+
+			string usageLabel = "{secondarytext}usage:";
+			string usage = "{selectedtext}" + commandPath;
+
+			if (commandOptions == null)
+			{
+				DisplayHelpForCommandWithNoOptions(command, commandPath, usageLabel, usage);
+			}
+			else
+			{
+				string tokenToProvideHelpFor = null;
+				BaseOption optionToProvideHelpFor = null;
+				bool tokenIsParameter = false;
+				bool tokenIsFlag = false;
+				if (parameters.Any())
+				{
+					tokenToProvideHelpFor = parameters.First().Key;
+					optionToProvideHelpFor = commandOptions.Parameters.FirstOrDefault(o => o.Tokens.Contains(tokenToProvideHelpFor));
+					tokenIsParameter = true;
+				}
+				else if (flags.Any())
+				{
+					tokenToProvideHelpFor = flags.First();
+					optionToProvideHelpFor = commandOptions.Flags.FirstOrDefault(o => o.Tokens.Contains(tokenToProvideHelpFor));
+					tokenIsFlag = true;
+				}
+
+				if (optionToProvideHelpFor != null && optionToProvideHelpFor.IncludeInHelp)
+				{
+					DisplayHelpForSpecificOption(command, usage, tokenToProvideHelpFor, optionToProvideHelpFor, tokenIsParameter, tokenIsFlag);
+				}
+				else
+				{
+					DisplayHelpForCommandWithOptions(command, commandOptions, usageLabel, usage);
+				}
+			}
 		}
 
 		private void DisplayGenericProgramHelp()
@@ -196,7 +201,7 @@ namespace LittleConsoleHelper.Commands
 	}
 	public class HelpOptions : OptionContainer
 	{
-		public Parameter SubCommand = new Parameter("SubCommand", null, false, "subcommand");
+		public Parameter SubCommand = new SubCommandParameter();
 		public HelpOptions(Dictionary<string, string> parameters, List<string> flags)
 			: base(parameters, flags)
 		{
