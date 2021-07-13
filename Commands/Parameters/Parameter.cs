@@ -48,7 +48,15 @@ namespace LittleConsoleHelper.Commands.Parameters
 		{
 			if (Required && string.IsNullOrWhiteSpace(Value))
 			{
-				Value = Prompt.ForString(Name);
+				do
+				{
+					Value = Prompt.ForString($"{{secondarytext}}Parameter {{selectedtext}}{Name}{{secondarytext}} ({{selectedtext}}{ValueTypeName}{{secondarytext}}) is required. Please enter a value:");
+					if (Validate(out var validationError))
+						break;
+					else
+						Formatter.WriteLine($"{{error}}The supplied value '{Value}' fails validation: {validationError}");
+				}
+				while (true);
 			}
 		}
 

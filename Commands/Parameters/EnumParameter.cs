@@ -22,7 +22,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 		{
 			if (Required && string.IsNullOrWhiteSpace(Value))
 			{
-				Value = Menu.SelectEnumMember<T>($"Select value for '{Name}'", options: null).Value.ToString();
+				Value = Menu.SelectEnumMember<T>($"{{secondarytext}}Parameter {{selectedtext}}{Name}{{secondarytext}} ({{selectedtext}}{ValueTypeName}{{secondarytext}}) is required. Please enter a value:", options: null).Value.ToString();
 			}
 		}
 		public T EnumValue

@@ -86,14 +86,14 @@ namespace LittleConsoleHelper.Commands.Parameters
 				case FileSystemValidationMode.Exists:
 					if (!File.Exists(Value) && !File.Exists(Path.Combine(Environment.CurrentDirectory, Value)))
 					{
-						validationError = $"The folder '{Value}' does not exist";
+						validationError = $"The file '{Value}' does not exist";
 						return false;
 					}
 					break;
 				case FileSystemValidationMode.DoesNotExist:
 					if (File.Exists(Value) || File.Exists(Path.Combine(Environment.CurrentDirectory, Value)))
 					{
-						validationError = $"The folder '{Value}' already exists";
+						validationError = $"The file '{Value}' already exists";
 						return false;
 					}
 					break;
