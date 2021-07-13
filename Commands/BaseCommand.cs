@@ -11,8 +11,8 @@ namespace LittleConsoleHelper.Commands
 	{
 		public abstract string Name { get; }
 		public virtual bool IsExecutable { get; } = true;
-		public virtual string ShortHelpText { get; } = null;
-		public virtual List<string> LongHelpText { get; } = null;
+		public virtual string ShortHelpText { get; set; } = null;
+		public virtual List<string> LongHelpText { get; set; } = null;
 		public virtual string FriendlyName { get { return Name; } }
 
 		protected List<BaseCommand<UContext>> _subCommands;
