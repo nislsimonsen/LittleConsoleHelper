@@ -184,7 +184,6 @@ namespace LittleConsoleHelper.Commands
 			var data = new List<List<string>>();
 
 			data.Add(new List<string> { "Command", command.FriendlyName });
-
 			data.Add(new List<string> { "Option", optionToProvideHelpFor.Name });
 
 			if (tokenIsParameter)
@@ -197,6 +196,9 @@ namespace LittleConsoleHelper.Commands
 			{
 				Parameter parameterToProvideHelpFor = optionToProvideHelpFor as Parameter;
 				data.Add(new List<string> { "Parameter type", parameterToProvideHelpFor.ValueTypeDescription });
+
+				data.Add(new List<string> { "Required", parameterToProvideHelpFor.Required ? "Yes" : "No" });
+				data.Add(new List<string> { "Default value", parameterToProvideHelpFor.DefaultValue ?? "None" });
 			}
 			data.Add(new List<string> { "Purpose", optionToProvideHelpFor.ShortDescription });
 
