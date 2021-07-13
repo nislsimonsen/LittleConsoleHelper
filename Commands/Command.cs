@@ -11,7 +11,7 @@ namespace LittleConsoleHelper.Commands
 		public static bool Run<U>(string[] programArgs, RootCommand<U> rootCommand, ILogger logger, U context)
 		{
 			var commandParts = CLIParser.Parse(programArgs);
-			
+
 			BaseCommand<U> commandToRun;
 			var helpCommand = rootCommand.SubCommands.FirstOrDefault(c => c.Name.Equals("help", StringComparison.InvariantCultureIgnoreCase));
 			if (commandParts.Flags.Contains("?") && helpCommand != null)
@@ -39,7 +39,11 @@ namespace LittleConsoleHelper.Commands
 					if (commandParts.Commands.Count > commandIndex)
 					{
 						var subcommand = string.Join(',', commandParts.Commands.ToArray()[(commandIndex + 1)..^0]);
-						commandParts.Parameters.Add("subcommand", subcommand);
+						var subcommandParameterKey = "subcommand";
+						if (commandParts.Parameters.ContainsKey(subcommandParameterKey))
+							commandParts.Parameters[subcommandParameterKey] = subcommand;
+						else
+							commandParts.Parameters.Add(subcommandParameterKey, subcommand);
 					}
 				}
 				catch (Exception e)
@@ -47,7 +51,7 @@ namespace LittleConsoleHelper.Commands
 					throw new ArgumentException($"Unable to correctly parse subcommand(s) from command list: {string.Join(',', commandParts.Commands.ToArray())}", e);
 				}
 			}
-			
+
 			commandToRun.SetLogger(logger);
 
 			return commandToRun.Execute(context, commandParts.Parameters, commandParts.Flags);
@@ -83,8 +87,8 @@ namespace LittleConsoleHelper.Commands
 					return GetCommandToRun(new List<string>(), command.SubCommands, logger);
 				else
 				{ }
-					throw new NullReferenceException($"Command {command.Name} is not executable and has no subcommands");
-				
+				throw new NullReferenceException($"Command {command.Name} is not executable and has no subcommands");
+
 			}
 		}
 	}

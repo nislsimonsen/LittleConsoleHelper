@@ -62,13 +62,13 @@ namespace LittleConsoleHelper.Commands
 
 				if (command != null)
 				{
-					DisplayHelpFormCommandOrCommandToken(parameters, flags, command, path);
+					DisplayHelpForCommandOrCommandToken(parameters, flags, command, path);
 				}
 			}
 			return true;
 		}
 
-		private static void DisplayHelpFormCommandOrCommandToken(Dictionary<string, string> parameters, List<string> flags, BaseCommand<T> command, List<string> path)
+		private static void DisplayHelpForCommandOrCommandToken(Dictionary<string, string> parameters, List<string> flags, BaseCommand<T> command, List<string> path)
 		{
 			var commandPath = string.Join(' ', path.ToArray());
 			var commandOptions = command.GetEmptyExecutionOptionsForHelp();
@@ -147,7 +147,15 @@ namespace LittleConsoleHelper.Commands
 			var f = commandOptions.Flags.Where(p => p.IncludeInHelp).OrderBy(f => f.Name).ToList();
 			var allOptions = new List<BaseOption>().Union(p).Union(f);
 
-			var requiredParametersUsage = String.Join(' ', p.Where(p => p.Required).Select(p => "-" + p.Tokens.First().ToLower() + " (value)").ToArray());
+			var subCommandParameter = commandOptions.Parameters.FirstOrDefault(o => o is SubCommandParameter) as SubCommandParameter;
+			var subCommandParameterUsage = string.Empty;
+			if (subCommandParameter != null)
+			{
+				subCommandParameterUsage = (subCommandParameter.Required ? "":"[") + subCommandParameter.UsageDescription.Replace(' ','_') + (subCommandParameter.Required ? "" : "]");
+			}
+			var requiredParametersUsage = 
+				subCommandParameterUsage
+				+ String.Join(' ', p.Where(p => p.Required).Select(p => "-" + p.Tokens.First().ToLower() + " (value)").ToArray());
 			var optionalParametersUsage = String.Join(' ', p.Where(p => !p.Required).Select(p => "[-" + p.Tokens.First().ToLower() + " (value)]").ToArray());
 			var flagsUsage = String.Join(' ', f.Select(p => "[/" + p.Tokens.First().ToLower() + "]").ToArray());
 
