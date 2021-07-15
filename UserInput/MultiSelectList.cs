@@ -8,7 +8,7 @@ namespace LittleConsoleHelper.UserInput
 {
 	public static class MultiSelectList
 	{
-		public static List<Option> Select(string header, List<Option> items, ColorScheme colorScheme = null)
+		public static List<Option> Select(string header, List<Option> items, string helpText = "Press up/down-key to navigate, spacebar to select/deselect and enter to accept", ColorScheme colorScheme = null)
 		{
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Default;
@@ -18,7 +18,7 @@ namespace LittleConsoleHelper.UserInput
 			while (true)
 			{
 				Clear();
-				WriteItems(items, selectedIndex, colorScheme);
+				WriteItems(items, selectedIndex, helpText, colorScheme);
 				var key = Console.ReadKey();
 				switch (key.Key)
 				{
@@ -50,7 +50,7 @@ namespace LittleConsoleHelper.UserInput
 		private static int PosLeft;
 		private static int PosTop;
 		private static List<string> WrittenLines = new List<string>();
-		private static void WriteItems(List<Option> items, int selectedIndex, ColorScheme colorScheme)
+		private static void WriteItems(List<Option> items, int selectedIndex, string helpText, ColorScheme colorScheme)
 		{
 			WrittenLines = new List<string>();
 			for (var i = 0; i < items.Count; i++)
@@ -80,6 +80,11 @@ namespace LittleConsoleHelper.UserInput
 					}
 				}
 				WrittenLines.Add(item.Text);
+			}
+			if (!string.IsNullOrEmpty(helpText))
+			{
+				WriteLine(helpText, colorScheme.Text, colorScheme.Background);
+				WrittenLines.Add(helpText);
 			}
 		}
 		private static void WriteLine(string text, ConsoleColor color, ConsoleColor backgroundColor)

@@ -14,11 +14,11 @@ namespace LittleConsoleHelper.Commands.Parameters
 
 		public override bool Validate(out string validationError)
 		{
+			validationError = null;
+
 			if (InternalParse().HasValue)
-			{
-				validationError = null;
 				return true;
-			}
+			
 			validationError = $"'{Value}' cannot be parsed to a boolean";
 			return false;
 		}

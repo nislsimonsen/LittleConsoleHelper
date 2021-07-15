@@ -50,7 +50,7 @@ namespace LittleConsoleHelper.Config
 		{ 
 			Text = Configuration.ColorText ?? Console.ForegroundColor, 
 			SelectedText = Configuration.ColorSelectedText ?? ConsoleColor.White,
-			SecondaryText = Configuration.ColorSecondaryText ?? Console.ForegroundColor,
+			SecondaryText = Configuration.ColorSecondaryText ?? ConsoleColor.DarkGray,
 			Background = Configuration.ColorTextBG ?? Console.BackgroundColor, 
 			SelectedBackground = Configuration.ColorSelectedTextBG ?? Console.BackgroundColor, 
 			SecondaryBackground = Configuration.ColorSecondaryTextBG ?? Console.BackgroundColor,

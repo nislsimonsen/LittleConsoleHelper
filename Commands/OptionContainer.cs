@@ -68,11 +68,17 @@ namespace LittleConsoleHelper.Commands
 
 			return r;
 		}
+		/// <summary>
+		/// Validates registered parameters which have a value. Does not validate value-less parameters.
+		/// </summary>
+		/// <returns>False if any parameters fail validation</returns>
 		public virtual bool Validate(Dictionary<string, string> parameters, List<string> flags)
 		{
 			foreach (var p in Parameters)
 			{
-				if (p && !p.Validate(out var errorMessage))
+				if (!p.Required && !p)
+					return true;
+				if ((p || p.Required) && !p.Validate(out var errorMessage))
 				{
 					var error = $"{{error}}Validation error for parameter '{p.Name}':";
 					Formatter.WriteLines(error, $"{{error}}{errorMessage}");

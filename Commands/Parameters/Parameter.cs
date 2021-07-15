@@ -17,9 +17,6 @@ namespace LittleConsoleHelper.Commands.Parameters
 			get
 			{
 				return _value ?? DefaultValue;
-				//if (_value == null && DefaultValue != null)
-				//	return DefaultValue;
-				//return _value;
 			}
 			set
 			{
@@ -46,6 +43,9 @@ namespace LittleConsoleHelper.Commands.Parameters
 
 		private Parameter() { }
 
+		/// <summary>
+		/// This method will be called to ensure that required parameters have a value
+		/// </summary>
 		protected internal virtual void EnsureRequired()
 		{
 			if (Required && string.IsNullOrWhiteSpace(Value))
@@ -62,19 +62,19 @@ namespace LittleConsoleHelper.Commands.Parameters
 			}
 		}
 
+		/// <summary>
+		/// Only call on parameters which have a value. 
+		/// </summary>
 		public virtual bool Validate(out string validationError)
 		{
 			validationError = null;
-			if (Required)
+			if (String.IsNullOrWhiteSpace(Value))
 			{
-				if (String.IsNullOrWhiteSpace(Value))
-				{
-					validationError = "cannot be empty";
-					return false;
-				}
-				return true;
+				validationError = "cannot be empty";
+				return false;
 			}
 			return true;
+			
 		}
 		public virtual bool IsDefined()
 		{

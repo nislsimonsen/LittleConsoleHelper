@@ -35,7 +35,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 		}
 		public override bool Validate(out string validationError)
 		{
-			if (Enum.TryParse<T>(Value, true, out var t))
+			if(Enum.TryParse<T>(Value, true, out var t))
 			{
 				validationError = null;
 				return true;
