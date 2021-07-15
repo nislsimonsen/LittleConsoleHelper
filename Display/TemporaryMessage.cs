@@ -1,9 +1,10 @@
-﻿using System;
+﻿using LittleConsoleHelper.Config;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.Display
 {
 	public static class TemporaryMessage
 	{

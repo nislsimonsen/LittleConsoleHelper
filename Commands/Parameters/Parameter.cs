@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LittleConsoleHelper.Display;
+using LittleConsoleHelper.UserInput;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

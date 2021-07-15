@@ -1,9 +1,11 @@
-﻿using System;
+﻿using LittleConsoleHelper.Config;
+using LittleConsoleHelper.Display;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.UserInput
 {
 	/// <summary>
 	/// Remark: All ColorScheme parameters can be omitted and will use a LittleConfigHelper.config file (if it exists) or bland default colors otherwise

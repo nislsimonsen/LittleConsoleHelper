@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.Config
 {
 	public static class Configuration
 	{

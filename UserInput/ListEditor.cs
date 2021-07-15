@@ -1,9 +1,11 @@
-﻿using System;
+﻿using LittleConsoleHelper.Config;
+using LittleConsoleHelper.UserInput.Menu;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.UserInput
 {
 	public static class ListEditor
 	{

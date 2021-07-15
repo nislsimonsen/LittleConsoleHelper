@@ -1,8 +1,10 @@
-﻿using System;
+﻿using LittleConsoleHelper.Config;
+using LittleConsoleHelper.Display;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.UserInput.Menu
 {
 	public static class Menu
 	{

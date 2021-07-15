@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.Config
 {
 	public class SimpleColorScheme
 	{

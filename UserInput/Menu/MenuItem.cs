@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.UserInput.Menu
 {
 	public class MenuItem
 	{

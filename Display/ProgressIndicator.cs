@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 
-namespace LittleConsoleHelper
+namespace LittleConsoleHelper.Display
 {
 	public abstract class ProgressIndicator
 	{
@@ -25,6 +25,8 @@ namespace LittleConsoleHelper
 		{
 			Current = value;
 			AdditionalMessage = additionalMessage;
+			if (Current > Max)
+				Current = Max;
 			if (Current == Max)
 				StopAfterNextRendering = true;
 		}
@@ -88,6 +90,7 @@ namespace LittleConsoleHelper
 			return animChars[animIndex];
 		}
 	}
+	
 
 	public class ProgressBarWithPercentageIndication : ProgressBar
 	{
@@ -101,9 +104,9 @@ namespace LittleConsoleHelper
 			{
 				animIndex = -1;
 			}
-			var bar = "{white}" + (GetAnimChar().PadRight(numberOfCharsProgress - 7, '-') + ">").PadRight(width - 6, ' ')
-				//+ progress.ToString("p0");
-				+ (int)(progress * 100) + "%";
+			var progressPercentage = (int)(progress * 100) + "%";
+			var bar = "{white}" + (GetAnimChar().PadRight(numberOfCharsProgress - 7, '-') + ">").PadRight(width - progressPercentage.Length, ' ')
+				+ progressPercentage;
 
 			TemporaryMessage.WriteLine(bar, !first, first);
 			if (!string.IsNullOrEmpty(additionalMessage))
