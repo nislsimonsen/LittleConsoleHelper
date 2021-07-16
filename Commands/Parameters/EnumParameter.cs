@@ -1,4 +1,5 @@
-﻿using LittleConsoleHelper.UserInput.Menu;
+﻿using LittleConsoleHelper.UserInput;
+using LittleConsoleHelper.UserInput.Menu;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +20,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 		public EnumParameter(string name, string defaultValue, bool required, params string[] tokens)
 			: base(name, defaultValue, required, tokens)
 		{ }
-		protected internal override void EnsureRequired()
+		protected internal override void EnsureRequired(Vocabulary vocabulary = null)
 		{
 			if (Required && string.IsNullOrWhiteSpace(Value))
 			{

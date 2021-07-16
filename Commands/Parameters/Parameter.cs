@@ -46,19 +46,28 @@ namespace LittleConsoleHelper.Commands.Parameters
 		/// <summary>
 		/// This method will be called to ensure that required parameters have a value
 		/// </summary>
-		protected internal virtual void EnsureRequired()
+		protected internal virtual void EnsureRequired(Vocabulary vocabulary = null)
 		{
 			if (Required && string.IsNullOrWhiteSpace(Value))
 			{
 				do
 				{
-					Value = Prompt.ForString($"{{secondarytext}}Parameter {{selectedtext}}{Name}{{secondarytext}} ({{selectedtext}}{ValueTypeName}{{secondarytext}}) is required. Please enter a value:");
+					var promptHeader = $"{{secondarytext}}Parameter {{selectedtext}}{Name}{{secondarytext}} ({{selectedtext}}{ValueTypeName}{{secondarytext}}) is required. Please enter a value:";
+					if (vocabulary == null)
+						Value = Prompt.ForString(promptHeader);
+					else
+						Value = Prompt.ForString(promptHeader, (s) => vocabulary.GetByType(ValueTypeName, s));
+
 					if (Validate(out var validationError))
 						break;
 					else
 						Formatter.WriteLine($"{{error}}The supplied value '{Value}' fails validation: {validationError}");
 				}
 				while (true);
+
+				if (vocabulary != null)
+					//vocabulary.AddText(Value);
+					vocabulary.Add(ValueTypeName, Value);
 			}
 		}
 

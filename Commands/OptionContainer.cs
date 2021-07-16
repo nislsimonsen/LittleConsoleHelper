@@ -1,5 +1,6 @@
 ﻿using LittleConsoleHelper.Commands.Parameters;
 using LittleConsoleHelper.Display;
+using LittleConsoleHelper.UserInput;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,18 @@ namespace LittleConsoleHelper.Commands
 {
 	public abstract class OptionContainer
 	{
+
+		protected OptionContainer()
+		{ }
+		public OptionContainer(Dictionary<string, string> parameters, List<string> flags)
+		{
+			CreationParameters = parameters;
+			CreationFlags = flags;
+			foreach (var p in Parameters)
+				ParseParameter(p, parameters);
+			foreach (var f in Flags)
+				ParseFlag(f, flags);
+		}
 		protected void ParseFlag(Flag f, List<string> args)
 		{
 			foreach (var t in f.Tokens)
@@ -27,21 +40,9 @@ namespace LittleConsoleHelper.Commands
 					break;
 				}
 		}
-
-		protected OptionContainer()
-		{ }
-		public OptionContainer(Dictionary<string, string> parameters, List<string> flags)
-		{
-			CreationParameters = parameters;
-			CreationFlags = flags;
-			foreach (var p in Parameters)
-				ParseParameter(p, parameters);
-			foreach (var f in Flags)
-				ParseFlag(f, flags);
-		}
 		public abstract List<Flag> Flags { get; }
 		public abstract List<Parameter> Parameters { get; }
-		public List<BaseOption> Options 
+		public List<BaseOption> Options
 		{
 			get
 			{
@@ -49,22 +50,30 @@ namespace LittleConsoleHelper.Commands
 				r.AddRange(Flags.Cast<BaseOption>().ToList());
 				r.AddRange(Parameters.Cast<BaseOption>().ToList());
 				return r;
-				
+
 			}
 		}
 		protected List<string> CreationFlags { get; set; }
 		protected Dictionary<string, string> CreationParameters { get; set; }
 
-		[Obsolete("Use parameterless overload instead")]
-		public virtual bool EnsureRequiredParametersAndValidate(Dictionary<string, string> parameters, List<string> flags)
+		private static Vocabulary AutocompleteVocabulary { get; set; }
+		public static void UseVocabulary(Vocabulary vocabulary)
 		{
-			Parameters.ForEach(p => p.EnsureRequired());
-			return Validate(CreationParameters, CreationFlags);
+			AutocompleteVocabulary = vocabulary;
 		}
+
 		public virtual bool EnsureRequiredParametersAndValidate()
 		{
-			Parameters.ForEach(p => p.EnsureRequired());
+			Parameters.ForEach(p => p.EnsureRequired(AutocompleteVocabulary));
 			var r = Validate(CreationParameters, CreationFlags);
+
+			if (AutocompleteVocabulary != null)
+			{
+				foreach (var p in Parameters)
+				{
+					AutocompleteVocabulary.AddParameterValue(p);
+				}
+			}
 
 			return r;
 		}
@@ -82,7 +91,7 @@ namespace LittleConsoleHelper.Commands
 				{
 					var error = $"{{error}}Validation error for parameter '{p.Name}':";
 					Formatter.WriteLines(error, $"{{error}}{errorMessage}");
-					
+
 					return false;
 				}
 			}
