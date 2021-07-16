@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LittleConsoleHelper.Display
@@ -9,20 +10,34 @@ namespace LittleConsoleHelper.Display
 		// TODO: Integrate the table specific color settings with ColorScheme and configuration files
 		static TableStyle TableStyleNone = new TableStyle { BorderStyle = TableBorderStyle.None, Padding = 1, HeaderColor = ConsoleColor.Gray, FirstColumnColor = ConsoleColor.Gray, OtherColumnsColor = ConsoleColor.Gray, BorderColor = ConsoleColor.Gray };
 		static TableStyle TableStyleDefault = new TableStyle { BorderStyle = TableBorderStyle.HeaderSeperated, Padding = 2, HeaderColor = ConsoleColor.White, FirstColumnColor = ConsoleColor.White, OtherColumnsColor = ConsoleColor.Gray, BorderColor = ConsoleColor.Gray };
+		public static void Display(List<List<string>> data, TableStyle tableStyle = null)
+		{
+			Display(null, data, tableStyle);
+		}
+		public static void Display(List<string> headers, List<List<string>> data, TableStyle tableStyle = null)
+		{
+			var table = new TableData(headers, data);
+			Display(table, tableStyle);
+		}
+
 		public static void Display(TableData table, TableStyle tableStyle = null)
 		{
 			if (tableStyle == null)
 				tableStyle = TableStyleDefault;
-			
-			var columnLengths = new int[table.ColumnHeaders.Count];
+
+			var maximumColumns = Math.Max(table.ColumnHeaders?.Count??0, table.Values.Max(row => row.Count));
+			var columnLengths = new int[maximumColumns];
+
 			bool anyHeaders = false;
-			for (var i = 0; i < table.ColumnHeaders.Count; i++)
+			if (table.ColumnHeaders != null)
 			{
-				var chl = Formatter.GetUnformattedText(table.ColumnHeaders[i]).Length;
-				if (chl > 0)
-					anyHeaders = true;
-				columnLengths[i] = Math.Max(columnLengths[i], chl);
-				
+				for (var i = 0; i < table.ColumnHeaders.Count; i++)
+				{
+					var chl = Formatter.GetUnformattedText(table.ColumnHeaders[i]).Length;
+					if (chl > 0)
+						anyHeaders = true;
+					columnLengths[i] = Math.Max(columnLengths[i], chl);
+				}
 			}
 			for (var i = 0; i < table.Values.Count; i++)
 			{
@@ -52,9 +67,12 @@ namespace LittleConsoleHelper.Display
 			if (anyHeaders)
 			{
 				Console.ForegroundColor = tableStyle.HeaderColor;
-				for (var i = 0; i < table.ColumnHeaders.Count; i++)
+				if (table.ColumnHeaders != null)
 				{
-					Formatter.Write(table.ColumnHeaders[i], columnLengths[i] + tableStyle.Padding, true);
+					for (var i = 0; i < table.ColumnHeaders.Count; i++)
+					{
+						Formatter.Write(table.ColumnHeaders[i], columnLengths[i] + tableStyle.Padding, true);
+					}
 				}
 				Formatter.WriteLine(string.Empty);
 
