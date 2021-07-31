@@ -479,5 +479,16 @@ namespace LittleConsoleHelper.UserInput
 			Console.ForegroundColor = colorScheme.Text;
 			Console.BackgroundColor = colorScheme.Background;
 		}
+
+		public static void WaitForKeyPress(string message, bool deleteMessageAfter = false)
+		{
+			TemporaryMessage.WriteLine(message, false, true);
+		
+			Console.ReadKey();
+			Console.Write("\b \b");
+
+			if (deleteMessageAfter)
+				TemporaryMessage.Clear();
+		}
 	}
 }
