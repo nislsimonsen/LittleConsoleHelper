@@ -28,7 +28,11 @@ namespace LittleConsoleHelper.Display
 			if (Current > Max)
 				Current = Max;
 			if (Current == Max)
-				StopAfterNextRendering = true;
+			{
+				//StopAfterNextRendering = true;
+				Timer_Elapsed_Inner();
+				Stop();
+			}
 		}
 		public void Stop()
 		{
@@ -52,14 +56,16 @@ namespace LittleConsoleHelper.Display
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
+			Timer_Elapsed_Inner();
+		}
+		private void Timer_Elapsed_Inner()
+		{ 
 			Render(false, AdditionalMessage);
 			if (StopAfterNextRendering)
 				Stop();
 		}
 
 		protected abstract void Render(bool first, string additionalMessage);
-		
-		
 	}
 
 	public class ProgressBar : ProgressIndicator
