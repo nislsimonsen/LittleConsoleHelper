@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>1.8.8.8</Version>
+    <Version>1.8.8.9</Version>
     <Authors>Nis L. Simonsen</Authors>
     <Description>When you have no choice but to build a UI in a console app (cmd/ps), LittleConsoleHelper makes displaying menus or just getting user input a little bit easier.
 
@@ -13,7 +13,7 @@ LittleConsoleHelper includes functionality for
 The package also contains helper classes for building a command hierarchy which can then be leveraged for command line parsing in cmd/ps (e.g. "myProgram myCommand mySubCommand -myParameter value /myFlag")
 
 Note that this is an alpha release and is largely untested by anyone except the author.</Description>
-    <PackageReleaseNotes>Added a few default progress indicators</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix for pb rendering</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Lionheart</Company>
   </PropertyGroup>

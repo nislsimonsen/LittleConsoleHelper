@@ -58,9 +58,11 @@ namespace LittleConsoleHelper.Display
 		{
 			Timer_Elapsed_Inner();
 		}
+		private object _renderLock = new object();
 		private void Timer_Elapsed_Inner()
-		{ 
-			Render(false, AdditionalMessage);
+		{
+			lock (_renderLock)
+				Render(false, AdditionalMessage);
 			if (StopAfterNextRendering)
 				Stop();
 		}
