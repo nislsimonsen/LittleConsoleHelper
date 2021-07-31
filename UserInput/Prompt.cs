@@ -480,9 +480,9 @@ namespace LittleConsoleHelper.UserInput
 			Console.BackgroundColor = colorScheme.Background;
 		}
 
-		public static void WaitForKeyPress(string message, bool deleteMessageAfter = false)
+		public static void WaitForKeyPress(string singleLineFormattedMessage = "(Press any key to continue)", bool deleteMessageAfter = true)
 		{
-			TemporaryMessage.WriteLine(message, false, true);
+			TemporaryMessage.WriteLine(singleLineFormattedMessage, false, true);
 		
 			Console.ReadKey();
 			Console.Write("\b \b");
