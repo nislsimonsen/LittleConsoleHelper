@@ -96,7 +96,6 @@ namespace LittleConsoleHelper.Display
 			return animChars[animIndex];
 		}
 	}
-	
 
 	public class ProgressBarWithPercentageIndication : ProgressBar
 	{
@@ -120,4 +119,39 @@ namespace LittleConsoleHelper.Display
 		}
 	}
 
+	public class ProgressPercentageIndicator : ProgressIndicator
+	{
+		protected override void Render(bool first, string additionalMessage)
+		{
+			var progress = (float)Current / (float)Max;
+			var progressPercentage = (int)(progress * 100) + "%";
+			TemporaryMessage.WriteLine(progressPercentage, !first, first);
+			if (!string.IsNullOrEmpty(additionalMessage))
+				TemporaryMessage.WriteLine(additionalMessage);
+		}
+	}
+
+	public class ProgressWorkingIndicator : ProgressIndicator
+	{
+		protected override void Render(bool first, string additionalMessage)
+		{
+			var progress = (float)Current / (float)Max;
+			string text;
+			if (progress < 0.1)
+				text = "{yellow}Starting{reset}";
+			else if (progress < 0.8)
+				text = "{white}Working{reset}";
+			else if (progress < 0.95)
+				text = "{white}Nearing completion{reset}";
+			else if (progress < 1)
+				text = "{green}Almost done{reset}";
+			else 
+				text = "{green}Done{reset}";
+
+			var progressPercentage = (int)(progress * 100) + "%";
+			text += $" ({progressPercentage})";
+			TemporaryMessage.WriteLine(text, !first, first);
+
+		}
+	}
 }
