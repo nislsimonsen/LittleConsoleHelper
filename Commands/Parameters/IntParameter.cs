@@ -13,13 +13,13 @@ namespace LittleConsoleHelper.Commands.Parameters
 
 		public override bool Validate(out string validationError)
 		{
-			if (int.TryParse(Value, out int f))
+			if (Value == null || !int.TryParse(Value, out int f))
 			{
-				validationError = null;
-				return true;
+				validationError = $"'{Value??"NULL"}' cannot be parsed to an integer";
+				return false;
 			}
-			validationError = $"'{Value}' cannot be parsed to an integer";
-			return false;
+			validationError = null;
+			return true;
 		}
 
 		public int IntValue

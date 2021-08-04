@@ -79,7 +79,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 			validationError = null;
 			if (String.IsNullOrWhiteSpace(Value))
 			{
-				validationError = "cannot be empty";
+				validationError = "cannot be null, empty or whitespace";
 				return false;
 			}
 			return true;

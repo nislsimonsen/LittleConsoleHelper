@@ -21,7 +21,7 @@ namespace LittleConsoleHelper.Commands.Parameters
 			}
 			catch
 			{
-				validationError = $"'{Value}' is not a valid URI";
+				validationError = $"'{Value??"NULL"}' is not a valid URI";
 				return false;
 			}
 		}
