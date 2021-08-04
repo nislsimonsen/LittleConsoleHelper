@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LittleConsoleHelper.Display.Images
 {
-	static class ImageRenderer
+	internal static class ImageRenderer
 	{
 		static Rectangle _latestImageRect;
 		public static void RenderImageBottom(string imagePath)
