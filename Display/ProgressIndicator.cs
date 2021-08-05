@@ -130,6 +130,7 @@ namespace LittleConsoleHelper.Display
 			TemporaryMessage.WriteLine(progressPercentage, !first, first);
 			if (!string.IsNullOrEmpty(additionalMessage))
 				TemporaryMessage.WriteLine(additionalMessage);
+			
 		}
 	}
 

@@ -8,7 +8,7 @@ namespace LittleConsoleHelper.Display
 {
 	public static class TemporaryMessage
 	{
-		private static List<string> CurrentMessages { get; set; }
+		private static List<string> CurrentMessages { get; set; } = new List<string>();
 		private static int Top { get; set; }
 		private static int Left { get; set; }
 		private static bool IsInUpdatable { get; set; }
@@ -55,11 +55,10 @@ namespace LittleConsoleHelper.Display
 		{
 			if (colorScheme == null)
 				colorScheme = SimpleColorScheme.Empty;
-			if (CurrentMessages == null)
-				CurrentMessages = new List<string>();
 			
 			if (startNew)
 			{
+				CurrentMessages = new List<string>();
 				Top = Console.CursorTop;
 				Left = Console.CursorLeft;
 			}
