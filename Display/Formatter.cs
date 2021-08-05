@@ -39,7 +39,7 @@ namespace LittleConsoleHelper.Display
 		}
 		public static void WriteLines(params string[] text)
 		{
-			WriteLines(false, text);
+			WriteLines(true, text);
 		}
 		public static void WriteLines(bool ensureNoBrokenWords, params string[] text)
 		{
@@ -56,7 +56,7 @@ namespace LittleConsoleHelper.Display
 		}
 
 
-		public static void Write(string text, int width = 0, bool skipInitialColor = false, bool ensureNonBrokenWords = false)
+		public static void Write(string text, int width = 0, bool skipInitialColor = false, bool ensureNonBrokenWords = true)
 		{
 			if (text == null)
 				text = string.Empty;
