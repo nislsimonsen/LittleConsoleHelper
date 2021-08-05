@@ -10,7 +10,7 @@ namespace LittleConsoleHelper.Commands
 {
 	public static class Command
 	{
-		public static bool Run<U>(string[] programArgs, RootCommand<U> rootCommand, ILogger logger, U context)
+		public static bool Run<U>(string[] programArgs, RootCommand<U> rootCommand, ILogger logger, U context, string uiMenuIndentationPerLevel = " ")
 		{
 			var commandParts = CLIParser.Parse(programArgs);
 
@@ -22,7 +22,7 @@ namespace LittleConsoleHelper.Commands
 			}
 			else
 			{
-				commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands, logger);
+				commandToRun = GetCommandToRun(commandParts.Commands, rootCommand.SubCommands, logger, uiMenuIndentationPerLevel);
 			}
 
 			if (commandToRun == null)
@@ -32,6 +32,8 @@ namespace LittleConsoleHelper.Commands
 				Formatter.WriteLine("{error}" + errorMessage);
 				return false;
 			}
+			if (commandToRun is NoCommand<U>)
+				return true;
 
 			if (commandToRun.CaptureSubcommand)
 			{
@@ -59,7 +61,7 @@ namespace LittleConsoleHelper.Commands
 			return commandToRun.Execute(context, commandParts.Parameters, commandParts.Flags);
 		}
 
-		private static BaseCommand<U> GetCommandToRun<U>(List<string> commands, List<BaseCommand<U>> subCommands, ILogger logger)
+		private static BaseCommand<U> GetCommandToRun<U>(List<string> commands, List<BaseCommand<U>> subCommands, ILogger logger, string uiMenuIndentationSequence = " ", string currentUiMenuIndentation = "")
 		{
 			BaseCommand<U> command = null;
 
@@ -70,7 +72,11 @@ namespace LittleConsoleHelper.Commands
 			}
 			else
 			{
-				command = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(sc.FriendlyName ?? sc.Name, null, sc)).ToList()).Value as BaseCommand<U>;
+				var options = new MenuShowOptions { AllowEscape = true };
+				var result = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(currentUiMenuIndentation + (sc.FriendlyName ?? sc.Name), null, sc)).ToList(), null, options);
+				if (result == null)
+					return new NoCommand<U>();
+				command = result.Value as BaseCommand<U>;
 			}
 			if (command == null)
 			{
@@ -84,14 +90,19 @@ namespace LittleConsoleHelper.Commands
 			else
 			{
 				if (commands.Any())
-					return GetCommandToRun(commands.ToArray()[1..^0].ToList(), command.SubCommands, logger);
+					return GetCommandToRun(commands.ToArray()[1..^0].ToList(), command.SubCommands, logger, uiMenuIndentationSequence, currentUiMenuIndentation + uiMenuIndentationSequence);
 				else if (command.SubCommands.Any())
-					return GetCommandToRun(new List<string>(), command.SubCommands, logger);
+					return GetCommandToRun(new List<string>(), command.SubCommands, logger, uiMenuIndentationSequence, currentUiMenuIndentation + uiMenuIndentationSequence);
 				else
 				{ }
 				throw new NullReferenceException($"Command {command.Name} is not executable and has no subcommands");
 
 			}
+		}
+
+		private class NoCommand<T> : BaseCommand<T>
+		{
+			public override string Name => throw new NotImplementedException();
 		}
 	}
 }
