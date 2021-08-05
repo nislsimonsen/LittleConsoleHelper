@@ -70,7 +70,7 @@ namespace LittleConsoleHelper.Commands
 			}
 			else
 			{
-				command = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(sc.Name, null, sc)).ToList()).Value as BaseCommand<U>;
+				command = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(sc.FriendlyName ?? sc.Name, null, sc)).ToList()).Value as BaseCommand<U>;
 			}
 			if (command == null)
 			{
