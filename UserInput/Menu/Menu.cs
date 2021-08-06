@@ -27,7 +27,7 @@ namespace LittleConsoleHelper.UserInput.Menu
 		{
 			return SelectFromList(null, listOfItems, options);
 		}
-		public static MenuItem SelectFromList(string headerText, IEnumerable<string> listOfItems, MenuShowOptions options)
+		public static MenuItem SelectFromList(string headerText, IEnumerable<string> listOfItems, MenuShowOptions options = null)
 		{
 			if (options == null)
 				options = MenuShowOptions.Default;
