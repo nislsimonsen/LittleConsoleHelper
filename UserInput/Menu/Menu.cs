@@ -129,7 +129,7 @@ namespace LittleConsoleHelper.UserInput.Menu
 		{
 			InitializeNode(rootNode);
 			if (colorScheme == null)
-				colorScheme = ColorScheme.Empty;
+				colorScheme = ColorScheme.Default;
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, colorScheme.Text);
 

@@ -46,6 +46,13 @@ namespace LittleConsoleHelper.UserInput
 		{
 			return ForString(header, (s) => autocompleteOptions.Where(a => a.StartsWith(s, StringComparison.InvariantCultureIgnoreCase)).ToList(), charsToDisplayOptions, colorScheme);
 		}
+		public static string ForString(string header, Vocabulary vocabulary, string vocabularyPartition, bool addResultToVocabulary = true, int charsToDisplayOptions = 1, ColorScheme colorScheme = null)
+		{
+			var r = ForString(header, partialString => vocabulary.GetByType(vocabularyPartition, partialString), charsToDisplayOptions, colorScheme);
+			if (addResultToVocabulary)
+				vocabulary.Add(vocabularyPartition, r, false);
+			return r;
+		}
 		/// <summary>
 		/// Prompts the user for a string with autocomplete
 		/// </summary>

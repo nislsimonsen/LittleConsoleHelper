@@ -10,7 +10,6 @@ namespace LittleConsoleHelper.UserInput
 {
 	public class Vocabulary
 	{
-		public List<string> AllWords { get; set; } = new List<string>();
 		[XmlIgnore]
 		public Dictionary<string, List<string>> WordsByType = new Dictionary<string, List<string>>();
 		public List<string> SerializedInnerWordsByType = new List<string>();
@@ -38,34 +37,21 @@ namespace LittleConsoleHelper.UserInput
 				}
 			}
 		}
-		public List<string> XGetText(string searchPattern)
-		{
-			// TODO: Probably change interface to IEnumerable
-			// TODO: Maybe Implement wildcard search
-			return AllWords.Where(w => w.ToLower().Contains(searchPattern.ToLower())).ToList();
-		}
-		public void XAddText(string newWord)
-		{
-			var existing = AllWords.FirstOrDefault(w => w.ToLower().Equals(newWord.ToLower()));
-			if (existing == null)
-				AllWords.Add(newWord);
-			WriteToFile(FilePath);
-		}
-
 		public List<string> GetByType(string type, string searchPattern)
 		{
 			if (!WordsByType.ContainsKey(type))
 				return new List<string>();
-			return WordsByType[type];
+			return WordsByType[type].Where(w => w.ToLower().Contains(searchPattern.ToLower())).ToList();
 		}
-		public void Add(string type, string newItem)
+		public void Add(string type, string newItem, bool bufferWrite = false)
 		{
 			if (!WordsByType.ContainsKey(type))
 				WordsByType.Add(type, new List<string>());
 			var existing = WordsByType[type].FirstOrDefault(i => i.ToLower().Equals(newItem.ToLower()));
 			if (existing == null)
 				WordsByType[type].Add(newItem);
-			WriteToFile(FilePath);
+			if(!bufferWrite)
+				WriteToFile(FilePath);
 		}
 
 		internal void AddParameterValue(Parameter p)
