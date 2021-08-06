@@ -23,7 +23,7 @@ namespace LittleConsoleHelper.UserInput.Menu
 			var defaultMenuItem = defaultItem == null ? null : listOfMenuItems.Where(mi => mi.Value.Equals(defaultItem)).Single();
 			return SelectFromList(listOfMenuItems, defaultMenuItem, MenuShowOptions.Default);
 		}
-		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, MenuShowOptions options)
+		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, MenuShowOptions options = null)
 		{
 			return SelectFromList(null, listOfItems, options);
 		}
