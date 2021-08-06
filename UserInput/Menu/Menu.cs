@@ -127,10 +127,12 @@ namespace LittleConsoleHelper.UserInput.Menu
 
 		private static MenuItem Select(string headerText, MenuItem rootNode, MenuItem selectedItem, ColorScheme colorScheme = null, bool allowEscape = true, bool allowInteriorNodeSelect = false, string interiorSuffix = " >", string interiorOpenSuffix = " <", string indentation = "\t", ClearOnSelectMode clearOnSelect = ClearOnSelectMode.ClearUnselected)
 		{
+			InitializeNode(rootNode);
 			if (colorScheme == null)
 				colorScheme = ColorScheme.Empty;
 			if (!string.IsNullOrEmpty(headerText))
 				WriteLine(headerText, colorScheme.Text);
+
 			if (selectedItem == null)
 			{
 				currentIndex = 0;
@@ -256,6 +258,15 @@ namespace LittleConsoleHelper.UserInput.Menu
 				PrintChoices(new List<MenuItem> { itemSelected }, colorScheme.SecondaryText, colorScheme.SelectedText, colorScheme.SecondaryBackground, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
 			}
 			return itemSelected;
+		}
+
+		private static void InitializeNode(MenuItem rootNode)
+		{
+			foreach (var c in rootNode.Children)
+			{
+				c.Parent = rootNode;
+				InitializeNode(c);
+			}
 		}
 
 		private static void PrintChoices(List<MenuItem> choices, ConsoleColor normal, ConsoleColor selected, ConsoleColor normalBg, ConsoleColor selectedBg, string interiorSuffix, string interiorOpenSuffix, string indentation)
