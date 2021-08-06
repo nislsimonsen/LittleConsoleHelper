@@ -73,7 +73,7 @@ namespace LittleConsoleHelper.Commands
 			else
 			{
 				var options = new MenuShowOptions { AllowEscape = true };
-				var result = Menu.SelectFromList(subCommands.Select(sc => new MenuItem(currentUiMenuIndentation + (sc.FriendlyName ?? sc.Name), null, sc)).ToList(), null, options);
+				var result = Menu.SelectFromList(subCommands.Where(sc => sc.VisibleInMenu).Select(sc => new MenuItem(currentUiMenuIndentation + (sc.FriendlyName ?? sc.Name), null, sc)).ToList(), null, options);
 				if (result == null)
 					return new NoCommand<U>();
 				command = result.Value as BaseCommand<U>;
