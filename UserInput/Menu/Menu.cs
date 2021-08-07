@@ -310,7 +310,7 @@ namespace LittleConsoleHelper.UserInput.Menu
 			Console.SetCursorPosition(left, top);
 			for (var i = 0; i < linesWritten; i++)
 			{
-				for (var j = 0; j < 60; j++)// todo shold not use fixed number here
+				for (var j = 0; j < Console.BufferWidth; j++)
 				{
 					Console.Write(" \b ");
 				}
