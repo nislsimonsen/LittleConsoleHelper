@@ -304,6 +304,9 @@ namespace LittleConsoleHelper.UserInput.Menu
 		}
 		private static void Clear()
 		{
+			var overflow = 1 + top + linesWritten - Console.BufferHeight;
+			if(overflow > 0)
+				top-=overflow;
 			Console.SetCursorPosition(left, top);
 			for (var i = 0; i < linesWritten; i++)
 			{
