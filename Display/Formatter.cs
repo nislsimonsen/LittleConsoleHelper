@@ -180,6 +180,7 @@ namespace LittleConsoleHelper.Display
 			{
 				Console.ForegroundColor = resetColor;
 			}
+			// Yes, this is terribad. Should be refactored, but has to be done alongside major overhaul to Configuration and ColorScheme classes.
 			else if (formatString.Equals("text", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = ColorScheme.Text;
@@ -198,14 +199,6 @@ namespace LittleConsoleHelper.Display
 			{
 				Console.ForegroundColor = ColorScheme.Header;
 			}
-			else if (formatString.Equals("subheader", StringComparison.InvariantCultureIgnoreCase))
-			{
-				Console.ForegroundColor = ColorScheme.SubHeader;
-			}
-			else if (formatString.Equals("note", StringComparison.InvariantCultureIgnoreCase))
-			{
-				Console.ForegroundColor = ColorScheme.Note;
-			}
 			else if (formatString.Equals("success", StringComparison.InvariantCultureIgnoreCase))
 			{
 				Console.ForegroundColor = ColorScheme.Success;
@@ -222,9 +215,11 @@ namespace LittleConsoleHelper.Display
 			{
 				Console.ForegroundColor = ColorScheme.Input;
 			}
-			else if (formatString.Equals("secondaryinput", StringComparison.InvariantCultureIgnoreCase))
+			else
 			{
-				Console.ForegroundColor = ColorScheme.SecondaryInput;
+				foreach (var c in ColorScheme.Custom)
+					if (formatString.Equals(c.Key, StringComparison.InvariantCultureIgnoreCase))
+						Console.ForegroundColor = c.Value;
 			}
 		}
 	}
