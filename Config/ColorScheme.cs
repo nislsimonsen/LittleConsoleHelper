@@ -56,5 +56,12 @@ namespace LittleConsoleHelper.Config
 			Input = Configuration.ColorInput ?? ConsoleColor.Cyan,
 			Custom = Configuration.CustomColors
 		};
+		public ConsoleColor GetCustomColor(string configKey)
+		{
+			if (Custom.ContainsKey(configKey))
+				return Custom[configKey];
+			throw new ArgumentException($"'{configKey}' is not correctly defined as LittleConsoleHelper.config");
+		}
+
 	}
 }
