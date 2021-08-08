@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace LittleConsoleHelper.Display
 {
@@ -54,7 +55,32 @@ namespace LittleConsoleHelper.Display
 			}
 			Console.ForegroundColor = resetColor;
 		}
-
+		public static void Highlight(params string[] lines)
+		{
+			Highlight(highlightColor: "yellow", lines: lines);
+		}
+		public static void Highlight(string highlightColor, params string[] lines)
+		{
+			var delay = 75;
+			var colors = new List<string> { "darkgray", "gray", "white", highlightColor, "white" }.ToArray();
+			Highlight(colors, delay, lines);
+			
+		}
+		public static void Highlight(string[] colorArray, int delay, params string[] lines)
+		{
+			var first = true;
+			for (var i = 0; i < colorArray.Length; i++)
+			{
+				for (var j = 0; j < lines.Length; j++)
+				{
+					TemporaryMessage.WriteLine("{" + colorArray[i] + "}" + lines[j], !first && j == 0, first && j == 0);
+					first = false;
+				}
+				if (i < colorArray.Length - 1)
+					Thread.Sleep(delay);
+			}
+		}
+		
 
 		public static void Write(string text, int width = 0, bool skipInitialColor = false, bool ensureNonBrokenWords = true)
 		{

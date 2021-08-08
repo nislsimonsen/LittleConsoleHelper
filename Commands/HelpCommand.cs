@@ -164,7 +164,7 @@ namespace LittleConsoleHelper.Commands
 			usage += (requiredParametersUsage.Length > 0 ? " " : string.Empty) + optionalParametersUsage;
 			usage += (optionalParametersUsage.Length > 0 ? " " : string.Empty) + flagsUsage;
 
-			Formatter.WriteLines(usageLabel + " " + usage, "", "Parameters and flags:");
+			Formatter.WriteLines(usageLabel + " " + usage, "");
 
 			var columns = new List<string> { "Name", "Required", "Type", "Token(s)" };
 			var values = new List<List<string>>();
