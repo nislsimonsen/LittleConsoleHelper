@@ -55,9 +55,14 @@ namespace LittleConsoleHelper.Display
 			}
 			Console.ForegroundColor = resetColor;
 		}
+		private static string[] defaultHighlightColors = new string[] { "darkgray", "gray", "white", "yellow", "white", "gray" };
+		public static void Highlight(string line, int delay = 75)
+		{
+			Highlight(defaultHighlightColors, delay, line);
+		}
 		public static void Highlight(params string[] lines)
 		{
-			Highlight(new string[] { "darkgray", "gray", "white", "yellow", "white", "gray" }, 75, lines);
+			Highlight(defaultHighlightColors, 75, lines);
 		}
 		public static void Highlight(string[] colorArray, int delay, params string[] lines)
 		{
