@@ -17,15 +17,19 @@ namespace LittleConsoleHelper.UserInput.Menu
 		static int linesWritten;
 		public static MenuShowOptions DefaultMenuShowOptions { get; set; }
 
-		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, string defaultItem = null)
+		public static string SelectFromList(IEnumerable<string> listOfItems)
+		{
+			return SelectFromList(listOfItems, defaultItem: null);
+		}
+		public static string SelectFromList(IEnumerable<string> listOfItems, string defaultItem = null)
 		{
 			var listOfMenuItems = listOfItems.Select(s => new MenuItem(s, null, s));
 			var defaultMenuItem = defaultItem == null ? null : listOfMenuItems.Where(mi => mi.Value.Equals(defaultItem)).Single();
-			return SelectFromList(listOfMenuItems, defaultMenuItem, MenuShowOptions.Default);
+			return SelectFromList(listOfMenuItems, defaultMenuItem, MenuShowOptions.Default).Value.ToString();
 		}
-		public static MenuItem SelectFromList(IEnumerable<string> listOfItems, MenuShowOptions options = null)
+		public static string SelectFromList(IEnumerable<string> listOfItems, MenuShowOptions options = null)
 		{
-			return SelectFromList(null, listOfItems, options);
+			return SelectFromList(null, listOfItems, options).Value.ToString();
 		}
 		public static MenuItem SelectFromList(string headerText, IEnumerable<string> listOfItems, MenuShowOptions options = null)
 		{
@@ -310,7 +314,7 @@ namespace LittleConsoleHelper.UserInput.Menu
 			Console.SetCursorPosition(left, top);
 			for (var i = 0; i < linesWritten; i++)
 			{
-				for (var j = 0; j < Console.BufferWidth; j++)
+				for (var j = 0; j < Console.BufferWidth-1; j++)
 				{
 					Console.Write(" \b ");
 				}
