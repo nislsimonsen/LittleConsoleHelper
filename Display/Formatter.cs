@@ -57,14 +57,7 @@ namespace LittleConsoleHelper.Display
 		}
 		public static void Highlight(params string[] lines)
 		{
-			Highlight(highlightColor: "yellow", lines: lines);
-		}
-		public static void Highlight(string highlightColor, params string[] lines)
-		{
-			var delay = 75;
-			var colors = new List<string> { "darkgray", "gray", "white", highlightColor, "white" }.ToArray();
-			Highlight(colors, delay, lines);
-			
+			Highlight(new string[] { "darkgray", "gray", "white", "yellow", "white", "gray" }, 75, lines);
 		}
 		public static void Highlight(string[] colorArray, int delay, params string[] lines)
 		{
