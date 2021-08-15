@@ -259,7 +259,15 @@ namespace LittleConsoleHelper.UserInput.Menu
 			else if (clearOnSelect == ClearOnSelectMode.ClearUnselected)
 			{
 				Clear();
-				PrintChoices(new List<MenuItem> { itemSelected }, colorScheme.SecondaryText, colorScheme.SelectedText, colorScheme.SecondaryBackground, colorScheme.SelectedBackground, interiorSuffix, interiorOpenSuffix, indentation);
+				Console.ForegroundColor = colorScheme.SelectedText;
+				Console.BackgroundColor = colorScheme.SelectedBackground;
+				Console.WriteLine(itemSelected.Text);
+				Console.ForegroundColor = resetColor;
+				Console.BackgroundColor = resetBgColor;
+			}
+			if (top < Console.BufferHeight - 1)
+			{
+				Console.SetCursorPosition(0, top + 1);
 			}
 			return itemSelected;
 		}
@@ -286,23 +294,23 @@ namespace LittleConsoleHelper.UserInput.Menu
 				{
 					Console.ForegroundColor = selected;
 					Console.BackgroundColor = selectedBg;
-					for (var j = 0; j < item.GetLevel(); j++)
-						Console.Write(indentation);
-					Console.WriteLine(item.Text + suffix);
 				}
 				else
 				{
 					Console.ForegroundColor = normal;
 					Console.BackgroundColor = normalBg;
-					for (var j = 0; j < item.GetLevel(); j++)
-						Console.Write(indentation);
-					Console.WriteLine(item.Text + suffix);
 				}
+
+				for (var j = 0; j < item.GetLevel(); j++)
+					Console.Write(indentation);
+				Console.WriteLine(item.Text + suffix);
+
 				if (item.IsExpanded)
 				{
 					PrintChoices(item.Children, normal, selected, normalBg, selectedBg, interiorSuffix, interiorOpenSuffix, indentation);
 				}
 			}
+
 			Console.ForegroundColor = resetColor;
 			Console.BackgroundColor = resetBgColor;
 		}
