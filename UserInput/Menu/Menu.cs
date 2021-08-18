@@ -160,6 +160,7 @@ namespace LittleConsoleHelper.UserInput.Menu
 			}
 			left = Console.CursorLeft;
 			top = Console.CursorTop;
+			linesWritten = 0;
 			resetColor = Console.ForegroundColor;
 			resetBgColor = Console.BackgroundColor;
 
@@ -265,10 +266,10 @@ namespace LittleConsoleHelper.UserInput.Menu
 				Console.ForegroundColor = resetColor;
 				Console.BackgroundColor = resetBgColor;
 			}
-			if (top < Console.BufferHeight - 1)
-			{
-				Console.SetCursorPosition(0, top + 1);
-			}
+			//if (top < Console.BufferHeight - 1)
+			//{
+			//	Console.SetCursorPosition(0, top + 1);
+			//}
 			return itemSelected;
 		}
 
