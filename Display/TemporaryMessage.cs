@@ -24,6 +24,10 @@ namespace LittleConsoleHelper.Display
 		{
 			WriteLine(message, false, true, colorScheme, fasterButNoFormat);
 		}
+		public static void StartNew()
+		{
+			WriteLine(null, false, true);
+		}
 
 		/// <summary>
 		/// Clears an existing TemporaryMessage section
@@ -35,6 +39,10 @@ namespace LittleConsoleHelper.Display
 		public static void Refresh(string message, SimpleColorScheme colorScheme = null, bool fasterButNoFormat = false)
 		{
 			WriteLine(message, true, false, colorScheme, fasterButNoFormat);
+		}
+		public static void Refresh()
+		{
+			WriteLine(null, true, false);
 		}
 		/// <summary>
 		/// Writes a line to an updatable section. The section is terminated by calling Clear. Multiple calls to this method result in a multiline-section
@@ -73,6 +81,8 @@ namespace LittleConsoleHelper.Display
 			Console.ForegroundColor = colorScheme.Text;
 			Console.BackgroundColor = colorScheme.Background;
 
+			if (message == null)
+				return;
 			if(fasterButNoFormat)
 				Console.WriteLine(message);
 			else

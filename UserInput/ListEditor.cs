@@ -21,8 +21,9 @@ namespace LittleConsoleHelper.UserInput
 		/// <param name="promptForFirstItemIfEmpty">If this is true and items is empty, one item will automatically be inserted and the user will prompted to name it.</param>
 		/// <param name="colorScheme">optional</param>
 		/// <param name="helpText">Optional. Will be displayed below the list editor.</param>
+		/// <param name="clearPreemptivelyToPreventBufferOverrunBug">Optional. In case of a visual buffer overrun, the method will clear the console prior to printing the items. Note that this is only to cover for a bug and will be fixed properly in a later release.</param>
 		/// <returns>If the user exits by pressing Enter: A new list containing the accepted items. If the user exits by pressing Escape: A copy of items</returns>
-		public static List<string> Edit(List<string> items, string header = null, string defaultItem = null, bool promptForFirstItemIfEmpty = true, ColorScheme colorScheme = null, string helpText = "Use: (shift+)Up/Down / Insert/Delete / Enter/Esc")
+		public static List<string> Edit(List<string> items, string header = null, string defaultItem = null, bool promptForFirstItemIfEmpty = true, ColorScheme colorScheme = null, string helpText = "Use: (shift+)Up/Down / Insert/Delete / Enter/Esc", bool clearPreemptivelyToPreventBufferOverrunBug = true)
 		{
 			var menuItems = items.Select(i => new MenuItem(i, null)).ToList();
 			if (string.IsNullOrEmpty(defaultItem) && items.Count() > 0)
@@ -30,14 +31,19 @@ namespace LittleConsoleHelper.UserInput
 			MenuItem menuDefaultItem = null;
 			if(menuItems.Any())
 				menuDefaultItem = menuItems.First(i => i.Text.Equals(defaultItem));
-			var result = EditList(header, menuItems, menuDefaultItem, colorScheme, helpText);
+			var result = EditList(header, menuItems, menuDefaultItem, colorScheme, helpText, promptForFirstItemIfEmpty, clearPreemptivelyToPreventBufferOverrunBug);
 			if (result == null)
 				return null;
 			return result.Select(mi => mi.Text).ToList();
 		}
 		
-		private static List<MenuItem> EditList(string header, List<MenuItem> items, MenuItem defaultItem, ColorScheme colorScheme, string helpText, bool promptForFirstItemIfEmpty = true)
+		private static List<MenuItem> EditList(string header, List<MenuItem> items, MenuItem defaultItem, ColorScheme colorScheme, string helpText, bool promptForFirstItemIfEmpty, bool clearPreemptivelyToPreventBufferOverrunBug)
 		{
+			// HACK: This is a poor solution for a problem which only occurs once the consoles outputbuffer size (300 for cmd, a couple of thousand for ps) is overrun. Fix similar to that done for Menu and TempMsg
+			var realEstate = Console.BufferHeight - Console.CursorTop;
+			if (clearPreemptivelyToPreventBufferOverrunBug && realEstate < 20)
+				Console.Clear();
+
 			int selectedIndex;
 			if (defaultItem == null || items.Count == 0)
 				selectedIndex = 0;
